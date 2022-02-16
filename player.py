@@ -10,6 +10,7 @@ class Player:
     # Initialize -------------------------------------------------- #
     def __init__(self):
         self.init_images()
+        self.init_rect()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -17,6 +18,10 @@ class Player:
         self.idx = 0
 
         self.images = clip_set_to_list(spriteset)
+
+    def init_rect(self):
+        size = self.images[self.idx].get_rect().size
+        self.rect = pygame.Rect(320, 180, *size)
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -29,7 +34,7 @@ class Player:
 
         # Draw
         img = self.images[self.idx // 5]
-        display.blit(img, (320, 180))
+        display.blit(img, self.rect)
 
         # Update
         self.idx += 1
