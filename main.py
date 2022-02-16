@@ -5,6 +5,8 @@ import sys
 
 # Redraw
 def redraw_game():
+    display.fill((245, 245, 255))
+
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
     win.blit(resized_display, (0, 0))
