@@ -1,4 +1,5 @@
 from windows import window
+from player import Player
 import pygame
 import sys
 
@@ -6,6 +7,9 @@ import sys
 # Redraw
 def redraw_game():
     display.fill((245, 245, 255))
+
+    # Player
+    player.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
@@ -38,6 +42,9 @@ if __name__ == "__main__":
     display = pygame.Surface(window.rect.size)
     pygame.display.set_caption("Mini Mage Arena")
     clock = pygame.time.Clock()
+
+    # Player
+    player = Player()
 
     # Execute
     game_loop()
