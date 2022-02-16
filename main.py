@@ -26,6 +26,10 @@ def game_loop():
             if event.type == pygame.QUIT:
                 run = False
         
+        # Player
+        player.update()
+
+        # Update
         redraw_game()
         clock.tick(window.framerate)
 
