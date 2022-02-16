@@ -12,7 +12,8 @@ class Player:
     def __init__(self):
         self.init_images()
         self.init_rect()
-        self.init_movement_direction()
+        self.init_direction()
+        self.init_movement()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -25,9 +26,11 @@ class Player:
         size = self.images[self.idx].get_rect().size
         self.rect = pygame.Rect(320, 180, *size)
 
-    def init_movement_direction(self):
-        # Direction
+    def init_direction(self):
         self.direction = None
+
+    def init_movement(self):
+        self.vel = 3
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -52,6 +55,7 @@ class Player:
     # Update ------------------------------------------------------ #
     def update(self):
         self.facing()
+        self.movement()
 
     # Direction
     def facing(self):
@@ -60,3 +64,29 @@ class Player:
             self.direction = "left" 
         else:  # right
             self.direction = "right" 
+
+    # Movment
+    def movement(self):
+        keys = pygame.key.get_pressed()
+
+        # Movement
+        if keys[pygame.K_a]:  # left
+            self.move_x(-self.vel)
+        if keys[pygame.K_d]:  # right
+            self.move_x(self.vel)
+        if keys[pygame.K_w]:  # up
+            self.move_y(-self.vel)
+        if keys[pygame.K_s]:  # down
+            self.move_y(self.vel)
+
+    def move_x(self, vel):
+        handle_rect = self.rect.copy()
+        handle_rect.x += vel
+        if not edge_collision(handle_rect):
+            self.rect.x += vel
+
+    def move_y(self, vel):
+        handle_rect = self.rect.copy()
+        handle_rect.y += vel
+        if not edge_collision(handle_rect):
+            self.rect.y += vel

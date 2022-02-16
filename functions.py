@@ -1,3 +1,4 @@
+from windows import window
 import pygame
 import os
 
@@ -54,3 +55,16 @@ def clip_set_to_list(set):
     [images] = [images] if len(images) > 1 else images
 
     return images
+
+
+# Collisions
+def edge_collision(entity_hitbox):
+    left = window.rect.left < entity_hitbox.left
+    right = window.rect.right > entity_hitbox.right
+    top = window.rect.top < entity_hitbox.top
+    bottom = window.rect.bottom > entity_hitbox.bottom
+
+    if left and right and top and bottom:
+        return False
+    else:
+        return True
