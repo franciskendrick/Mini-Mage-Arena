@@ -1,7 +1,9 @@
 from functions import *
 from windows import window
+from spells import FireBall
 import pygame
 import os
+import time
 
 pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
@@ -14,6 +16,7 @@ class Player:
         self.init_rect()
         self.init_direction()
         self.init_movement()
+        self.init_attack()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -32,9 +35,28 @@ class Player:
     def init_movement(self):
         self.vel = 3
 
+    def init_attack(self):
+        self.spell_arguments = {
+            FireBall: (self.rect.center, pygame.mouse.get_pos())
+        }
+
+        # Spell in Use
+        self.spells_available = {
+            "fireball": FireBall
+        }
+        self.spell_in_use = self.spells_available["fireball"]
+
+        # Attack Lists
+        self.attack_list = []
+        
+        # Time 
+        self.last_attack = time.time()
+        self.attack_limit = 500  # milliseconds
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         self.draw_sprite(display)
+        self.draw_attacks(display)
 
     def draw_sprite(self, display):
         # Reset
@@ -52,10 +74,15 @@ class Player:
         # Update
         self.idx += 1
 
+    def draw_attacks(self, display):
+        for attack in self.attack_list:
+            attack.draw(display)
+
     # Update ------------------------------------------------------ #
     def update(self):
         self.facing()
         self.movement()
+        self.attacks()
 
     # Direction
     def facing(self):
@@ -79,6 +106,13 @@ class Player:
         if keys[pygame.K_s]:  # down
             self.move_y(self.vel)
 
+    # Attacks
+    def attacks(self):
+        self.append_attack()
+        self.update_attack()
+
+    # Functions --------------------------------------------------- #
+    # Movement
     def move_x(self, vel):
         handle_rect = self.rect.copy()
         handle_rect.x += vel
@@ -90,3 +124,17 @@ class Player:
         handle_rect.y += vel
         if not edge_collision(handle_rect):
             self.rect.y += vel
+
+    # Attacks
+    def append_attack(self):
+        left_click, _, _ = pygame.mouse.get_pressed()
+        if left_click:  # left click is pressed 
+            dt = time.time() - self.last_attack
+            if dt * 1000 >= self.attack_limit:  # spam limit
+                arguments = self.spell_arguments[self.spell_in_use]
+                attack = self.spell_in_use(*arguments)
+
+                self.attack_list.append(attack)
+
+    def update_attack(self):
+        pass
