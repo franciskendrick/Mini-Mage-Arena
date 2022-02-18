@@ -34,6 +34,10 @@ def game_loop():
         # Player
         player.update()
 
+        # Enemies
+        for enemy in enemies:
+            enemy.update(player)
+
         # Update
         redraw_game()
         clock.tick(window.framerate)

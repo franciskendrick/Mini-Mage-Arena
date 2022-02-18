@@ -23,6 +23,9 @@ class Slime:
         size = self.images[self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
 
+    def init_direction(self):
+        self.direction = None
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
@@ -31,6 +34,8 @@ class Slime:
 
         # Direction
         img = self.images[self.idx // 5]
+        if self.direction == "left":
+            img = pygame.transform.flip(img, True, False)
         
         # Draw
         display.blit(img, self.rect)
@@ -39,5 +44,14 @@ class Slime:
         self.idx += 1
 
     # Update ------------------------------------------------------ #
+    def update(self, player):
+        self.facing(player)
+
+    # Direction
+    def facing(self, player):
+        if self.rect.centerx - player.rect.centerx > 0:  # left
+            self.direction = "left"
+        else:  # face right
+            self.direction = "right"
 
     # Functions --------------------------------------------------- #
