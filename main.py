@@ -1,5 +1,6 @@
 from windows import window
 from player import Player
+from enemies import Slime
 import pygame
 import sys
 
@@ -10,6 +11,10 @@ def redraw_game():
 
     # Player
     player.draw(display)
+
+    # Enemies
+    for enemy in enemies:
+        enemy.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
@@ -49,6 +54,9 @@ if __name__ == "__main__":
 
     # Player
     player = Player()
+
+    # Enemies
+    enemies = [Slime()]
 
     # Execute
     game_loop()
