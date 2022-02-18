@@ -99,11 +99,22 @@ def clip_set_to_list(set):
 
 
 # Collisions
-def edge_collision(entity_hitbox):
-    left = window.rect.left < entity_hitbox.left
-    right = window.rect.right > entity_hitbox.right
-    top = window.rect.top < entity_hitbox.top
-    bottom = window.rect.bottom > entity_hitbox.bottom
+def rect_edge_collision(rect):
+    left = window.rect.left < rect.left
+    right = window.rect.right > rect.right
+    top = window.rect.top < rect.top
+    bottom = window.rect.bottom > rect.bottom
+
+    if left and right and top and bottom:
+        return False
+    else:
+        return True
+
+def circle_edge_collision(circle):
+    left = window.rect.left < circle.center[0] - circle.radius
+    right = window.rect.right > circle.center[0] + circle.radius
+    top = window.rect.top < circle.center[1] - circle.radius
+    bottom = window.rect.bottom > circle.center[1] + circle.radius
 
     if left and right and top and bottom:
         return False

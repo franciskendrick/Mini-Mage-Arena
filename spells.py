@@ -10,6 +10,7 @@ class FireBall:
         self.circle = Circle(origin, 4)
         self.init_color()
         self.init_movement(target)
+        self.init_collision_detection()
 
     def init_color(self):
         self.color = (222, 158, 65)
@@ -23,6 +24,9 @@ class FireBall:
         self.x_vel = math.cos(angle)
         self.y_vel = math.sin(angle)
 
+    def init_collision_detection(self):
+        self.collided = False
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         center = self.circle.center
@@ -31,9 +35,18 @@ class FireBall:
 
     # Update ------------------------------------------------------ #
     def update(self):
-        self.movement()
+        if not self.collided:
+            self.movement()
+            self.wall_collision()
 
     # Movement
     def movement(self):
         self.circle.center[0] += (self.x_vel * self.speed)
         self.circle.center[1] += (self.y_vel * self.speed)
+
+    # Collisions
+    def wall_collision(self):
+        if circle_edge_collision(self.circle):
+            self.collided = True
+
+    # Functions --------------------------------------------------- #

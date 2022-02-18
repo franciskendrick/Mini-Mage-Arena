@@ -112,13 +112,13 @@ class Player:
     def move_x(self, vel):
         handle_rect = self.rect.copy()
         handle_rect.x += vel
-        if not edge_collision(handle_rect):
+        if not rect_edge_collision(handle_rect):
             self.rect.x += vel
 
     def move_y(self, vel):
         handle_rect = self.rect.copy()
         handle_rect.y += vel
-        if not edge_collision(handle_rect):
+        if not rect_edge_collision(handle_rect):
             self.rect.y += vel
 
     # Attacks
@@ -138,5 +138,14 @@ class Player:
                 self.last_attack = time.time()
 
     def update_attack(self):
+        remove_attack = []
+
+        # Update Attacks
         for attack in self.attack_list:
             attack.update()
+            if attack.collided:
+                remove_attack.append(attack)
+
+        # Remove Attacks
+        for attack in remove_attack:
+            self.attack_list.remove(attack)
