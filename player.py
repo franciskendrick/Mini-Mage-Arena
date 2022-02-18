@@ -33,7 +33,8 @@ class Player:
         self.direction = None
 
     def init_movement(self):
-        self.vel = 3
+        self.walk_vel = 3
+        self.sprint_vel = 5
 
     def init_attack(self):
         # Spell in Use
@@ -92,15 +93,18 @@ class Player:
     def movement(self):
         keys = pygame.key.get_pressed()
 
+        # Sprint
+        vel = self.sprint_vel if keys[pygame.K_LSHIFT] else self.walk_vel
+
         # Movement
         if keys[pygame.K_a]:  # left
-            self.move_x(-self.vel)
+            self.move_x(-vel)
         if keys[pygame.K_d]:  # right
-            self.move_x(self.vel)
+            self.move_x(vel)
         if keys[pygame.K_w]:  # up
-            self.move_y(-self.vel)
+            self.move_y(-vel)
         if keys[pygame.K_s]:  # down
-            self.move_y(self.vel)
+            self.move_y(vel)
 
     # Attacks
     def attacks(self):
