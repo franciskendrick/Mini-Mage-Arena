@@ -135,6 +135,7 @@ class Player:
                 attack = self.spell_in_use(*arguments)
 
                 self.attack_list.append(attack)
+                self.last_attack = time.time()
 
     def update_attack(self):
         for attack in self.attack_list:
