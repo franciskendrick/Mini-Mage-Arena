@@ -36,10 +36,6 @@ class Player:
         self.vel = 3
 
     def init_attack(self):
-        self.spell_arguments = {
-            FireBall: (self.rect.center, pygame.mouse.get_pos())
-        }
-
         # Spell in Use
         self.spells_available = {
             "fireball": FireBall
@@ -131,10 +127,15 @@ class Player:
         if left_click:  # left click is pressed 
             dt = time.time() - self.last_attack
             if dt * 1000 >= self.attack_limit:  # spam limit
-                arguments = self.spell_arguments[self.spell_in_use]
+                spell_arguments = {
+                    FireBall: (self.rect.center, pygame.mouse.get_pos())
+                }
+
+                arguments = spell_arguments[self.spell_in_use]
                 attack = self.spell_in_use(*arguments)
 
                 self.attack_list.append(attack)
 
     def update_attack(self):
-        pass
+        for attack in self.attack_list:
+            attack.update()
