@@ -11,6 +11,8 @@ class Slime:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.init_direction()
+        self.init_movement()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -25,6 +27,9 @@ class Slime:
 
     def init_direction(self):
         self.direction = None
+
+    def init_movement(self):
+        self.vel = 2
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -46,6 +51,7 @@ class Slime:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.movement(player)
 
     # Direction
     def facing(self, player):
@@ -54,4 +60,40 @@ class Slime:
         else:  # face right
             self.direction = "right"
 
+    # Movement
+    def movement(self, player):
+        self.move_left(player)
+        self.move_right(player)
+        self.move_up(player)
+        self.move_down(player)
+
     # Functions --------------------------------------------------- #
+    # Movement
+    def move_left(self, player):
+        handle_rect = self.rect.copy()
+        if player.rect.centerx < self.rect.centerx - self.vel:
+            handle_rect.centerx -= self.vel
+            if not rect_edge_collision(handle_rect):
+                self.rect.centerx -= self.vel
+
+    def move_right(self, player):
+        handle_rect = self.rect.copy()
+        if player.rect.centerx > self.rect.centerx + self.vel:
+            handle_rect.centerx += self.vel
+            if not rect_edge_collision(handle_rect):
+                self.rect.centerx += self.vel
+
+    def move_up(self, player):
+        handle_rect = self.rect.copy()
+        if player.rect.centery < self.rect.centery - self.vel:
+            handle_rect.centery -= self.vel
+            if not rect_edge_collision(handle_rect):
+                self.rect.centery -= self.vel
+
+    def move_down(self, player):
+        handle_rect = self.rect.copy()
+        if player.rect.centery > self.rect.centery + self.vel:
+            handle_rect.centery += self.vel
+            if not rect_edge_collision(handle_rect):
+                self.rect.centery += self.vel
+
