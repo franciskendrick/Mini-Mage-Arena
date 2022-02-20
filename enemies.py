@@ -96,4 +96,3 @@ class Slime:
             handle_rect.centery += self.vel
             if not rect_edge_collision(handle_rect):
                 self.rect.centery += self.vel
-

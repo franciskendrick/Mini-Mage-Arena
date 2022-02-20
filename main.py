@@ -60,7 +60,8 @@ if __name__ == "__main__":
     player = Player()
 
     # Enemies
-    enemies = [Slime()]
+    # enemies = [Slime()]
+    enemies = []
 
     # Execute
     game_loop()
