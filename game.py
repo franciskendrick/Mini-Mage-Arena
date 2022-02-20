@@ -11,7 +11,7 @@ game_data = json.load(json_file)
 json_file.close()
 
 
-class StatusBar:
+class PlayerGauge:
     # Initialize -------------------------------------------------- #
     def __init__(self):
         self.init_images()
@@ -19,8 +19,8 @@ class StatusBar:
 
     def init_images(self):
         spriteset = pygame.image.load(
-            path + "/assets/windows" + "/statusbar.png")
-        order = ["bar", "icon", "progress"]
+            path + "/assets/windows" + "/playergauge.png")
+        order = ["bar", "icon", "gauge"]
     
         self.images = {}
         separated_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
@@ -29,7 +29,7 @@ class StatusBar:
             self.images[name] = image
 
     def init_positions(self):
-        self.positions = game_data["statusbar_position"]
+        self.positions = game_data["playergauge_position"]
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -43,9 +43,9 @@ class StatusBar:
             bar = self.images["bar"]
             display.blit(bar, self.positions["bar"][key])
 
-            # Progress
-            x, y = self.positions["progress"][key]
+            # Gauge
+            x, y = self.positions["gauge"][key]
             for _ in range(20):
-                image = self.images["progress"][idx]
+                image = self.images["gauge"][idx]
                 display.blit(image, (x, y))
                 x += 7

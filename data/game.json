@@ -1,5 +1,5 @@
 {
-    "statusbar_position": {
+    "playergauge_position": {
         "icon": {
             "health": [16, 1], 
             "mana": [18, 12], 
@@ -10,7 +10,7 @@
             "mana": [31, 13],
             "stamina": [31, 25]
         },
-        "progress": {
+        "gauge": {
             "health": [34, 3],
             "mana": [34, 15],
             "stamina": [34, 27]
