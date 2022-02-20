@@ -91,11 +91,66 @@ def clip_set_to_list(set):
 
                 # Append
                 images.append(img)
-    
+
     # Unpack Images if Less Than One
     [images] = [images] if len(images) > 1 else images
 
     return images
+
+
+def clip_set_to_dict(sets, order):
+    dict_images = {}
+    for name, set in zip(order, sets):
+        image = clip_set_to_list(set)
+        dict_images[name] = image
+    
+    return dict_images
+
+
+def separate_sets_from_xaxis(set_img, separator_color):
+    separated_sets = []
+    current_wd = 0
+    for x in range(set_img.get_width()):
+        pixel = set_img.get_at((x, 0))
+
+        # Found a Separator
+        if pixel == separator_color:
+            # Clip Image
+            set = clip(
+                set_img,
+                (x - current_wd, 0),
+                (current_wd, set_img.get_height()))
+
+            # Append
+            separated_sets.append(set)
+            current_wd = 0
+        else:
+            current_wd += 1 
+
+    return separated_sets
+
+
+def separate_sets_from_yaxis(set_img, separator_color):
+    separated_sets = []
+    current_ht = 0
+    for y in range(set_img.get_height()):
+        pixel = set_img.get_at((0, y))
+
+        # Found a Separator
+        if pixel == separator_color:
+            # Clip Image
+            set = clip(
+                set_img,
+                (0, y - current_ht),
+                (set_img.get_width(), current_ht))
+
+            # Append
+            separated_sets.append(set)
+            current_ht = 0
+        else:
+            current_ht += 1 
+
+    return separated_sets
 
 
 # Collisions
@@ -109,6 +164,7 @@ def rect_edge_collision(rect):
         return False
     else:
         return True
+
 
 def circle_edge_collision(circle):
     left = window.rect.left < circle.center[0] - circle.radius
