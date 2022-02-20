@@ -1,4 +1,5 @@
 from windows import window
+from game import StatusBar
 from player import Player
 from enemies import Slime
 import pygame
@@ -8,6 +9,9 @@ import sys
 # Redraw
 def redraw_game():
     display.fill((245, 245, 255))
+
+    # Window
+    status_bar.draw(display)
 
     # Player
     player.draw(display)
@@ -58,6 +62,9 @@ if __name__ == "__main__":
 
     # Player
     player = Player()
+
+    # Windows
+    status_bar = StatusBar()
 
     # Enemies
     # enemies = [Slime()]
