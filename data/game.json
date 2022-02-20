@@ -1,0 +1,19 @@
+{
+    "statusbar_position": {
+        "icon": {
+            "health": [16, 1], 
+            "mana": [18, 12], 
+            "stamina": [18, 25]
+        },
+        "bar": {
+            "health": [31, 1],
+            "mana": [31, 13],
+            "stamina": [31, 25]
+        },
+        "progress": {
+            "health": [34, 3],
+            "mana": [34, 15],
+            "stamina": [34, 27]
+        }
+    }
+}
