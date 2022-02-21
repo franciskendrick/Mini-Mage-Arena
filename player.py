@@ -50,6 +50,13 @@ class Player:
         self.last_attack = time.time()
         self.attack_limit = 500  # milliseconds
 
+    def init_status(self):
+        self.maximum_stats = {
+            "health": 20,
+            "mana": 120,
+            "stamina": 20}
+        self.stats = self.maximum_stats.copy()
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         self.draw_sprite(display)
