@@ -1,5 +1,5 @@
 from windows import window
-from game import PlayerGauge
+from game import PlayerGauge, game
 from player import Player
 from enemies import Slime
 import pygame
@@ -11,6 +11,7 @@ def redraw_game():
     display.fill((245, 245, 255))
 
     # Window
+    game.draw_statbar_bg(display)
     player_gauge.draw(display)
 
     # Player

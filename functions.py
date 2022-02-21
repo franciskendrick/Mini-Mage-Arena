@@ -155,10 +155,10 @@ def separate_sets_from_yaxis(set_img, separator_color):
 
 # Collisions
 def rect_edge_collision(rect):
-    left = window.rect.left < rect.left
-    right = window.rect.right > rect.right
-    top = window.rect.top < rect.top
-    bottom = window.rect.bottom > rect.bottom
+    left = window.arena_rect.left < rect.left
+    right = window.arena_rect.right > rect.right
+    top = window.arena_rect.top < rect.top
+    bottom = window.arena_rect.bottom > rect.bottom
 
     if left and right and top and bottom:
         return False
@@ -167,10 +167,10 @@ def rect_edge_collision(rect):
 
 
 def circle_edge_collision(circle):
-    left = window.rect.left < circle.center[0] - circle.radius
-    right = window.rect.right > circle.center[0] + circle.radius
-    top = window.rect.top < circle.center[1] - circle.radius
-    bottom = window.rect.bottom > circle.center[1] + circle.radius
+    left = window.arena_rect.left < circle.center[0] - circle.radius
+    right = window.arena_rect.right > circle.center[0] + circle.radius
+    top = window.arena_rect.top < circle.center[1] - circle.radius
+    bottom = window.arena_rect.bottom > circle.center[1] + circle.radius
 
     if left and right and top and bottom:
         return False

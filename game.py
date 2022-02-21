@@ -1,4 +1,5 @@
 from functions import *
+from windows import window
 import pygame
 import json
 import os
@@ -9,6 +10,11 @@ path = os.path.dirname(os.path.realpath(__file__))
 json_file = open(path + r"/data" + r"/game.json")
 game_data = json.load(json_file)
 json_file.close()
+
+
+class Game:
+    def draw_statbar_bg(self, display):
+        pygame.draw.rect(display, (16, 20, 31), window.statbar_rect)
 
 
 class PlayerGauge:
@@ -49,3 +55,6 @@ class PlayerGauge:
                 image = self.images["gauge"][idx]
                 display.blit(image, (x, y))
                 x += 7
+
+
+game = Game()
