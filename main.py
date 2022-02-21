@@ -42,6 +42,8 @@ def game_loop():
         # Enemies
         for enemy in enemies:
             enemy.update(player)
+        
+        print(player.stats)  # !!!
 
         # Update
         redraw_game()

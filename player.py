@@ -17,6 +17,7 @@ class Player:
         self.init_direction()
         self.init_movement()
         self.init_attack()
+        self.init_status()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -33,8 +34,13 @@ class Player:
         self.direction = None
 
     def init_movement(self):
+        # Velocities
         self.walk_vel = 3
         self.sprint_vel = 5
+
+        # Time
+        self.last_sprint = time.time()
+        self.sprint_time = 500  # milliseconds
 
     def init_attack(self):
         # Spell in Use
@@ -101,7 +107,7 @@ class Player:
         keys = pygame.key.get_pressed()
 
         # Sprint
-        vel = self.sprint_vel if keys[pygame.K_LSHIFT] else self.walk_vel
+        vel = self.get_velocity()
 
         # Movement
         if keys[pygame.K_a]:  # left
@@ -120,6 +126,31 @@ class Player:
 
     # Functions --------------------------------------------------- #
     # Movement
+    def get_velocity(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LSHIFT]:  # shift is down
+            if self.stats["stamina"] > 0:  # still has stamina
+                vel = self.sprint_vel
+
+                # Update Stamina Stat
+                dt = time.time() - self.last_sprint
+                if dt * 1000 >= self.sprint_time:
+                    self.stats["stamina"] -= 1
+                    self.last_sprint = time.time()
+            else:  # no stamina
+                vel = self.walk_vel
+        else:  # shift is up
+            vel = self.walk_vel
+
+            # Update Stamina Stat
+            dt = time.time() - self.last_sprint
+            if dt * 1000 >= self.sprint_time:
+                if self.stats["stamina"] < 20:
+                    self.stats["stamina"] += 1
+                self.last_sprint = time.time()
+            
+        return vel
+
     def move_x(self, vel):
         handle_rect = self.rect.copy()
         handle_rect.x += vel
