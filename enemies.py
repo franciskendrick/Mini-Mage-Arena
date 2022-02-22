@@ -95,7 +95,7 @@ class Slime:
     def facing(self, player):
         if self.rect.centerx - player.rect.centerx > 0:  # left
             self.direction = "left"
-        else:  # face right
+        else:  # right
             self.direction = "right"
 
     # Movement
@@ -165,6 +165,7 @@ class DarkMage:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.init_direction()
         self.init_status()
 
     def init_images(self):
@@ -183,6 +184,9 @@ class DarkMage:
         size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
 
+    def init_direction(self):
+        self.direction = None
+
     def init_status(self):
         self.health = 12
         self.is_dead = False
@@ -194,8 +198,12 @@ class DarkMage:
         if self.idx >= len(imgs) * 5:
             self.idx = 0
 
-        # Draw
+        # Direction
         img = imgs[self.idx // 5]
+        if self.direction == "left":
+            img = pygame.transform.flip(img, True, False)
+        
+        # Draw
         display.blit(img, self.rect)
 
         # Update
@@ -203,4 +211,11 @@ class DarkMage:
 
     # Update ------------------------------------------------------ #
     def update(self, player):
-        pass
+        self.facing(player)
+
+    # Direction
+    def facing(self, player):
+        if self.rect.centerx - player.rect.centerx > 0:  # left
+            self.direction = "left"
+        else:  # right
+            self.direction = "right"
