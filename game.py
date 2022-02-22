@@ -7,6 +7,13 @@ import os
 pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
 
+# Window
+win_size = (
+    window.rect.width * window.enlarge,
+    window.rect.height * window.enlarge)
+win = pygame.display.set_mode(win_size)
+
+# Json
 json_file = open(path + r"/data" + r"/game.json")
 game_data = json.load(json_file)
 json_file.close()
@@ -27,12 +34,16 @@ class PlayerGauge:
         spriteset = pygame.image.load(
             path + "/assets/windows" + "/playergauge.png")
         order = ["bar", "icon", "gauge"]
-    
+
+        # Images
         self.images = {}
         separated_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
         for name, separated_set in zip(order, separated_sets):
             image = clip_set_to_list(separated_set)
             self.images[name] = image
+        
+        # Gauge Palette
+        self.gauge_palette()
 
     def init_positions(self):
         self.positions = game_data["playergauge_position"]
@@ -51,10 +62,39 @@ class PlayerGauge:
 
             # Gauge
             x, y = self.positions["gauge"][key]
-            for _ in range(20):
-                image = self.images["gauge"][idx]
-                display.blit(image, (x, y))
+            gague_images = self.images["gauge"][key]
+            for (toggle, img_on, img_off) in gague_images:
+                img = img_on if toggle else img_off
+                display.blit(img, (x, y))
                 x += 7
+
+    # Functions --------------------------------------------------- #
+    def gauge_palette(self):
+        # Palette
+        off_palette = {
+            "health": {
+                (117, 36, 56): (32, 46, 55),
+                (165, 48, 48): (57, 74, 80)},
+            "mana": {
+                (60, 94, 139): (32, 46, 55),
+                (79, 143, 186): (57, 74, 80)},
+            "stamina": {
+                (222, 158, 65): (32, 46, 55),
+                (232, 193, 112): (57, 74, 80)}
+        }
+
+        # Gauge Images
+        gauge_images = {}
+        keys = ["health", "mana", "stamina"]
+        for idx, key in enumerate(keys):
+            images = []
+            for _ in range(20):
+                img_on = self.images["gauge"][idx]
+                img_off = palette_swap(
+                    img_on.convert(), off_palette[key])
+                images.append([True, img_on, img_off])
+            gauge_images[key] = images
+        self.images["gauge"] = gauge_images
 
 
 game = Game()
