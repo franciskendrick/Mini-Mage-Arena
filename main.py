@@ -71,8 +71,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [Slime()]
-    enemies = []
+    enemies = [Slime()]
+    # enemies = []
 
     # Execute
     game_loop()

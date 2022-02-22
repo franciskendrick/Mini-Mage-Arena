@@ -1,5 +1,6 @@
 from functions import *
 import pygame
+import time
 import os
 
 pygame.init()
@@ -13,6 +14,7 @@ class Slime:
         self.init_rect()
         self.init_direction()
         self.init_movement()
+        self.init_attack()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -30,6 +32,14 @@ class Slime:
 
     def init_movement(self):
         self.vel = 2
+
+    def init_attack(self):
+        # Damage
+        self.damage = 1
+        
+        # Time
+        self.last_attack = time.time()
+        self.attack_limit = 750  # milliseconds
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -52,6 +62,7 @@ class Slime:
     def update(self, player):
         self.facing(player)
         self.movement(player)
+        self.attack(player)
 
     # Direction
     def facing(self, player):
@@ -66,6 +77,14 @@ class Slime:
         self.move_right(player)
         self.move_up(player)
         self.move_down(player)
+
+    # Attack
+    def attack(self, player):
+        if self.rect.colliderect(player.rect):
+            dt = time.time() - self.last_attack
+            if dt * 1000 >= self.attack_limit:  # spam limit
+                player.hit(self.damage)
+                self.last_attack = time.time()
 
     # Functions --------------------------------------------------- #
     # Movement

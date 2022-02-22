@@ -191,3 +191,7 @@ class Player:
         # Remove Attacks
         for attack in remove_attack:
             self.attack_list.remove(attack)
+
+    # Hit
+    def hit(self, damage):
+        self.stats["health"] -= damage
