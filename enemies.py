@@ -158,3 +158,49 @@ class Slime:
 
         self.image_used = "hit"
         self.last_hit = time.time()
+
+
+class DarkMage:
+    # Initialize -------------------------------------------------- #
+    def __init__(self):
+        self.init_images()
+        self.init_rect()
+        self.init_status()
+
+    def init_images(self):
+        # Spriteset
+        spriteset = pygame.image.load(
+            path + "/assets/sprites" + "/dark_mage.png")
+        self.idx = 0
+
+        # Images
+        self.images = {
+            "default": clip_set_to_list(spriteset)
+        }
+        self.image_used = "default"
+
+    def init_rect(self):
+        size = self.images[self.image_used][self.idx].get_rect().size
+        self.rect = pygame.Rect(100, 100, *size)
+
+    def init_status(self):
+        self.health = 12
+        self.is_dead = False
+
+    # Draw -------------------------------------------------------- #
+    def draw(self, display):
+        # Reset
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
+            self.idx = 0
+
+        # Draw
+        img = imgs[self.idx // 5]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
+
+    # Update ------------------------------------------------------ #
+    def update(self, player):
+        pass
