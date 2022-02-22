@@ -40,8 +40,15 @@ def game_loop():
         player.update(enemies)
 
         # Enemies
+        remove_enemies = []
         for enemy in enemies:
             enemy.update(player)
+
+            if enemy.is_dead:
+                remove_enemies.append(enemy)
+
+        for enemy in remove_enemies:
+            enemies.remove(enemy)
         
         # Player Gauge
         player_gauge.update(player.stats)
