@@ -17,17 +17,33 @@ class Player:
         self.init_direction()
         self.init_movement()
         self.init_attack()
+        self.init_hit()
         self.init_status()
 
     def init_images(self):
+        # Spriteset
         spriteset = pygame.image.load(
             path + "/assets/sprites" + "/player_mage.png")
         self.idx = 0
 
-        self.images = clip_set_to_list(spriteset)
+        # Palettes
+        hit_palette = {
+            (9, 10, 20): (65, 29, 49),
+            (30, 29, 57): (117, 36, 56),
+            (64, 39, 81): (165, 48, 48),
+            (122, 54, 123): (207, 87, 60),
+            (235, 237, 233): (235, 237, 233)}
+
+        # Images
+        self.images = {
+            "default": clip_set_to_list(spriteset),
+            "hit": clip_set_to_list(
+                palette_swap(spriteset.convert(), hit_palette))
+        }
+        self.image_used = "default"
 
     def init_rect(self):
-        size = self.images[self.idx].get_rect().size
+        size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(320, 180, *size)
 
     def init_direction(self):
@@ -56,6 +72,10 @@ class Player:
         self.last_attack = time.time()
         self.attack_limit = 500  # milliseconds
 
+    def init_hit(self):
+        self.last_hit = time.time()
+        self.hit_time = 300  # milliseconds 
+
     def init_status(self):
         self.maximum_stats = {
             "health": 20,
@@ -70,11 +90,12 @@ class Player:
 
     def draw_sprite(self, display):
         # Reset
-        if self.idx >= len(self.images) * 5:
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
             self.idx = 0
 
         # Direction
-        img = self.images[self.idx // 5]
+        img = imgs[self.idx // 5]
         if self.direction == "left":
             img = pygame.transform.flip(img, True, False)
 
@@ -93,6 +114,7 @@ class Player:
         self.facing()
         self.movement()
         self.attacks()
+        self.hit_timer()
 
     # Direction
     def facing(self):
@@ -123,6 +145,13 @@ class Player:
     def attacks(self):
         self.append_attack()
         self.update_attack()
+
+    # Hit
+    def hit_timer(self):
+        if self.image_used == "hit":
+            dt = time.time() - self.last_hit
+            if dt * 1000 >= self.hit_time:
+                self.image_used = "default"
 
     # Functions --------------------------------------------------- #
     # Movement
@@ -195,3 +224,6 @@ class Player:
     # Hit
     def hit(self, damage):
         self.stats["health"] -= damage
+
+        self.image_used = "hit"
+        self.last_hit = time.time()
