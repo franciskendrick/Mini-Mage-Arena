@@ -110,10 +110,10 @@ class Player:
             attack.draw(display)
 
     # Update ------------------------------------------------------ #
-    def update(self):
+    def update(self, enemies):
         self.facing()
         self.movement()
-        self.attacks()
+        self.attacks(enemies)
         self.hit_timer()
 
     # Direction
@@ -142,9 +142,9 @@ class Player:
             self.move_y(vel)
 
     # Attacks
-    def attacks(self):
+    def attacks(self, enemies):
         self.append_attack()
-        self.update_attack()
+        self.update_attack(enemies)
 
     # Hit
     def hit_timer(self):
@@ -208,12 +208,12 @@ class Player:
                 self.attack_list.append(attack)
                 self.last_attack = time.time()
 
-    def update_attack(self):
+    def update_attack(self, enemies):
         remove_attack = []
 
         # Update Attacks
         for attack in self.attack_list:
-            attack.update()
+            attack.update(enemies)
             if attack.collided:
                 remove_attack.append(attack)
 

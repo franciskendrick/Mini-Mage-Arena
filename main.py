@@ -37,7 +37,7 @@ def game_loop():
                 run = False
         
         # Player
-        player.update()
+        player.update(enemies)
 
         # Enemies
         for enemy in enemies:

@@ -15,6 +15,8 @@ class Slime:
         self.init_direction()
         self.init_movement()
         self.init_attack()
+        self.init_hit()
+        self.init_status()
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -40,6 +42,14 @@ class Slime:
         # Time
         self.last_attack = time.time()
         self.attack_limit = 750  # milliseconds
+
+    def init_hit(self):
+        self.last_hit = time.time()
+        self.hit_time = 300  # milliseconds
+
+    def init_status(self):
+        self.health = 12
+        self.is_dead = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -115,3 +125,9 @@ class Slime:
             handle_rect.centery += self.vel
             if not rect_edge_collision(handle_rect):
                 self.rect.centery += self.vel
+
+    # Hit
+    def hit(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.is_dead = True
