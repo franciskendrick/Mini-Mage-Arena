@@ -43,7 +43,8 @@ def game_loop():
         for enemy in enemies:
             enemy.update(player)
         
-        print(player.stats)  # !!!
+        # Player Gauge
+        player_gauge.update(player.stats)
 
         # Update
         redraw_game()

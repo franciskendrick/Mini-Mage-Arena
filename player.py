@@ -40,7 +40,7 @@ class Player:
 
         # Time
         self.last_sprint = time.time()
-        self.sprint_time = 500  # milliseconds
+        self.stamina_time = 500  # milliseconds
 
     def init_attack(self):
         # Spell in Use
@@ -59,7 +59,7 @@ class Player:
     def init_status(self):
         self.maximum_stats = {
             "health": 20,
-            "mana": 120,
+            "mana": 20,  # 120 !!!
             "stamina": 20}
         self.stats = self.maximum_stats.copy()
 
@@ -134,7 +134,7 @@ class Player:
 
                 # Update Stamina Stat
                 dt = time.time() - self.last_sprint
-                if dt * 1000 >= self.sprint_time:
+                if dt * 1000 >= self.stamina_time:
                     self.stats["stamina"] -= 1
                     self.last_sprint = time.time()
             else:  # no stamina
@@ -144,7 +144,7 @@ class Player:
 
             # Update Stamina Stat
             dt = time.time() - self.last_sprint
-            if dt * 1000 >= self.sprint_time:
+            if dt * 1000 >= self.stamina_time:
                 if self.stats["stamina"] < 20:
                     self.stats["stamina"] += 1
                 self.last_sprint = time.time()

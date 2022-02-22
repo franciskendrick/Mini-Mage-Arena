@@ -62,11 +62,19 @@ class PlayerGauge:
 
             # Gauge
             x, y = self.positions["gauge"][key]
-            gague_images = self.images["gauge"][key]
-            for (toggle, img_on, img_off) in gague_images:
+            gauge_images = self.images["gauge"][key]
+            for (toggle, img_on, img_off) in gauge_images:
                 img = img_on if toggle else img_off
                 display.blit(img, (x, y))
                 x += 7
+
+    # Update ------------------------------------------------------ #
+    def update(self, player_status):
+        status_items = list(player_status.items())
+        for (key, stat) in status_items:
+            gauge_images = self.images["gauge"][key]
+            for idx, data in enumerate(gauge_images):
+                data[0] = True if stat >= idx else False
 
     # Functions --------------------------------------------------- #
     def gauge_palette(self):
