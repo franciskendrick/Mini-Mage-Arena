@@ -19,14 +19,29 @@ class Slime:
         self.init_status()
 
     def init_images(self):
+        # Spriteset
         spriteset = pygame.image.load(
             path + "/assets/sprites" + "/slime.png")
         self.idx = 0
 
-        self.images = clip_set_to_list(spriteset)
+        # Palettes
+        hit_palette = {
+            (9, 10, 20): (9, 10, 20),
+            (60, 94, 139): (168, 181, 178),
+            (79, 143, 186): (199, 207, 204),
+            (115, 190, 211): (235, 237, 233),
+            (235, 237, 233): (235, 237, 233)}
+
+        # Images
+        self.images = {
+            "default": clip_set_to_list(spriteset),
+            "hit": clip_set_to_list(
+                palette_swap(spriteset.convert(), hit_palette))
+        }
+        self.image_used = "default"
 
     def init_rect(self):
-        size = self.images[self.idx].get_rect().size
+        size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
 
     def init_direction(self):
@@ -54,11 +69,12 @@ class Slime:
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
-        if self.idx >= len(self.images) * 5:
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
             self.idx = 0
 
         # Direction
-        img = self.images[self.idx // 5]
+        img = imgs[self.idx // 5]
         if self.direction == "left":
             img = pygame.transform.flip(img, True, False)
         
@@ -73,6 +89,7 @@ class Slime:
         self.facing(player)
         self.movement(player)
         self.attack(player)
+        self.hit_timer()
 
     # Direction
     def facing(self, player):
@@ -95,6 +112,13 @@ class Slime:
             if dt * 1000 >= self.attack_limit:  # spam limit
                 player.hit(self.damage)
                 self.last_attack = time.time()
+
+    # Hit
+    def hit_timer(self):
+        if self.image_used == "hit":
+            dt = time.time() - self.last_hit
+            if dt * 1000 >= self.hit_time:
+                self.image_used = "default"
 
     # Functions --------------------------------------------------- #
     # Movement
@@ -131,3 +155,6 @@ class Slime:
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
+
+        self.image_used = "hit"
+        self.last_hit = time.time()
