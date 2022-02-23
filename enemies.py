@@ -188,7 +188,7 @@ class DarkMage:
         self.direction = None
 
     def init_status(self):
-        self.health = 12
+        self.health = 20
         self.is_dead = False
 
     # Draw -------------------------------------------------------- #
@@ -219,3 +219,9 @@ class DarkMage:
             self.direction = "left"
         else:  # right
             self.direction = "right"
+
+    # Functions --------------------------------------------------- #
+    def hit(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.is_dead = True
