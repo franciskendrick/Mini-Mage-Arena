@@ -166,6 +166,7 @@ class DarkMage:
         self.init_images()
         self.init_rect()
         self.init_direction()
+        self.init_hit()
         self.init_status()
 
     def init_images(self):
@@ -174,9 +175,19 @@ class DarkMage:
             path + "/assets/sprites" + "/dark_mage.png")
         self.idx = 0
 
+        # Palettes
+        hit_palette = {
+            (9, 10, 20): (9, 10, 20),
+            (25, 51, 45): (168, 181, 178),
+            (37, 86, 46): (199, 207, 204),
+            (70, 130, 50): (235, 237, 233),
+            (165, 48, 48): (235, 237, 233)}
+
         # Images
         self.images = {
-            "default": clip_set_to_list(spriteset)
+            "default": clip_set_to_list(spriteset),
+            "hit": clip_set_to_list(
+                palette_swap(spriteset.convert(), hit_palette))
         }
         self.image_used = "default"
 
@@ -186,6 +197,10 @@ class DarkMage:
 
     def init_direction(self):
         self.direction = None
+
+    def init_hit(self):
+        self.last_hit = time.time()
+        self.hit_time = 300  # milliseconds
 
     def init_status(self):
         self.health = 20
@@ -212,6 +227,7 @@ class DarkMage:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.hit_timer()
 
     # Direction
     def facing(self, player):
@@ -220,8 +236,19 @@ class DarkMage:
         else:  # right
             self.direction = "right"
 
+    # Hit
+    def hit_timer(self):
+        if self.image_used == "hit":
+            dt = time.time() - self.last_hit
+            if dt * 1000 >= self.hit_time:
+                self.image_used = "default"
+
     # Functions --------------------------------------------------- #
+    # Hit
     def hit(self, damage):
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
+        
+        self.image_used = "hit"
+        self.last_hit = time.time()
