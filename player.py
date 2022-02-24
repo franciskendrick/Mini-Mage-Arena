@@ -2,8 +2,8 @@ from functions import *
 from windows import window
 from player_spells import FireBall
 import pygame
-import os
 import time
+import os
 
 pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))

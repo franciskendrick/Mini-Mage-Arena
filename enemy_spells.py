@@ -11,7 +11,7 @@ class DarkFireBall:
         self.init_color()
         self.init_movement(target)
         self.damage = 3
-        self.collide = False
+        self.collided = False
 
     def init_color(self):
         self.color = (168, 202, 88)
@@ -33,7 +33,10 @@ class DarkFireBall:
 
     # Update ------------------------------------------------------ #
     def update(self, player):
-        self.movement()
+        if not self.collided:
+            self.movement()
+            self.wall_collision()
+            self.player_collision(player)
 
     # Movement
     def movement(self):
@@ -45,8 +48,8 @@ class DarkFireBall:
         if circle_edge_collision(self.circle):
             self.collided = True
 
-    def entity_collision(self, player):
-        if self.circle.coliderect(player.rect):
+    def player_collision(self, player):
+        if self.circle.colliderect(player.rect):
             player.hit(self.damage)
             self.collided = True
 

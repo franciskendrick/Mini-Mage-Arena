@@ -1,4 +1,6 @@
 from functions import *
+from windows import window
+from enemy_spells import DarkFireBall
 import pygame
 import time
 import os
@@ -166,6 +168,7 @@ class DarkMage:
         self.init_images()
         self.init_rect()
         self.init_direction()
+        self.init_attack()
         self.init_hit()
         self.init_status()
 
@@ -198,6 +201,14 @@ class DarkMage:
     def init_direction(self):
         self.direction = None
 
+    def init_attack(self):
+        # Attack Lists
+        self.attack_list = []
+
+        # Time
+        self.last_attack = time.time()
+        self.attack_limit = 1_200  # milliseconds
+
     def init_hit(self):
         self.last_hit = time.time()
         self.hit_time = 300  # milliseconds
@@ -208,6 +219,10 @@ class DarkMage:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
+        self.draw_sprite(display)
+        self.draw_attacks(display)
+
+    def draw_sprite(self, display):
         # Reset
         imgs = self.images[self.image_used]
         if self.idx >= len(imgs) * 5:
@@ -224,9 +239,14 @@ class DarkMage:
         # Update
         self.idx += 1
 
+    def draw_attacks(self, display):
+        for attack in self.attack_list:
+            attack.draw(display)
+
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.attacks(player)
         self.hit_timer()
 
     # Direction
@@ -236,6 +256,11 @@ class DarkMage:
         else:  # right
             self.direction = "right"
 
+    # Attack
+    def attacks(self, player):
+        self.append_attack(player)
+        self.update_attack(player)
+
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
@@ -244,6 +269,32 @@ class DarkMage:
                 self.image_used = "default"
 
     # Functions --------------------------------------------------- #
+    # Attacks
+    def append_attack(self, player):
+        dt = time.time() - self.last_attack
+        if dt * 1000 >= self.attack_limit:  # spam limit
+            target = (
+                player.rect.centerx * window.enlarge,
+                player.rect.centery * window.enlarge)
+
+            attack = DarkFireBall(self.rect.center, target)
+            
+            self.attack_list.append(attack)
+            self.last_attack = time.time()
+
+    def update_attack(self, player):
+        remove_attack = []
+
+        # Update Attacks
+        for attack in self.attack_list:
+            attack.update(player)
+            if attack.collided:
+                remove_attack.append(attack)
+
+        # Remove Attacks
+        for attack in remove_attack:
+            self.attack_list.remove(attack)
+
     # Hit
     def hit(self, damage):
         self.health -= damage
