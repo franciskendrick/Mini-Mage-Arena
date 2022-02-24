@@ -1,6 +1,6 @@
 from functions import *
 from windows import window
-from spells import FireBall
+from player_spells import FireBall
 import pygame
 import os
 import time
