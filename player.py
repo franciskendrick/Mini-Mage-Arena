@@ -79,7 +79,7 @@ class Player:
     def init_status(self):
         self.maximum_stats = {
             "health": 20,
-            "mana": 20,  # 120 !!!
+            "mana": 120,
             "stamina": 20}
         self.stats = self.maximum_stats.copy()
 

@@ -78,8 +78,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [DarkMage()]
-    # enemies = []
+    # enemies = [DarkMage()]
+    enemies = []
 
     # Execute
     game_loop()

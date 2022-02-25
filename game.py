@@ -63,10 +63,16 @@ class PlayerGauge:
             # Gauge
             x, y = self.positions["gauge"][key]
             gauge_images = self.images["gauge"][key]
-            for (toggle, img_on, img_off) in gauge_images:
-                img = img_on if toggle else img_off
-                display.blit(img, (x, y))
-                x += 7
+            if key != "mana":
+                for (toggle, img_on, img_off) in gauge_images:
+                    img = img_on if toggle else img_off
+                    display.blit(img, (x, y))
+                    x += 7
+            else:
+                for gauge_idx, (toggle, img_on, img_off) in enumerate(gauge_images, 1):
+                    img = img_on if toggle else img_off
+                    display.blit(img, (x, y))
+                    x += 2 if gauge_idx % 6 == 0 else 1
 
     # Update ------------------------------------------------------ #
     def update(self, player_status):
@@ -93,8 +99,10 @@ class PlayerGauge:
 
         # Gauge Images
         gauge_images = {}
-        keys = ["health", "mana", "stamina"]
-        for idx, key in enumerate(keys):
+
+        # Gauge Images of Health & Stamina
+        keys = {"health": 0, "stamina": 2}
+        for (key, idx) in list(keys.items()):
             images = []
             for _ in range(20):
                 img_on = self.images["gauge"][idx]
@@ -102,6 +110,26 @@ class PlayerGauge:
                     img_on.convert(), off_palette[key])
                 images.append([True, img_on, img_off])
             gauge_images[key] = images
+
+        # Gauge Images of Mana
+        images = []
+        for count in range(120):
+            # Orig Image
+            orig_img = self.images["gauge"][1]
+
+            # Image On
+            pos = (0, 0) if count % 6 == 0 else (1, 0)
+            img_on = clip(orig_img, pos, (1, orig_img.get_height()))
+
+            # Image Off
+            img_off = palette_swap(
+                img_on.convert(), off_palette["mana"])
+
+            # Append
+            images.append([True, img_on, img_off])
+        gauge_images["mana"] = images
+
+        # Append Gauge Images
         self.images["gauge"] = gauge_images
 
 
