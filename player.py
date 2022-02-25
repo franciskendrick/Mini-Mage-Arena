@@ -70,7 +70,7 @@ class Player:
         
         # Time 
         self.last_attack = time.time()
-        self.attack_limit = 10  # milliseconds
+        self.attack_limit = 500  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.time()

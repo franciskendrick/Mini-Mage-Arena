@@ -172,7 +172,6 @@ def palette_swap(img, palette):
     return img
 
 
-
 # Collisions
 def rect_edge_collision(rect):
     left = window.arena_rect.left < rect.left

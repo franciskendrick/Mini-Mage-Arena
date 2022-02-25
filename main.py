@@ -81,5 +81,8 @@ if __name__ == "__main__":
     # enemies = [DarkMage()]
     enemies = []
 
+    # Supports
+    mana_crystals = []
+
     # Execute
     game_loop()
