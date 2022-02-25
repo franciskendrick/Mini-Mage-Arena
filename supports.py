@@ -21,7 +21,7 @@ class ManaCrystal:
         order = ["small", "medium", "large"]
         mana_spritesets = separate_sets_from_yaxis(
             spriteset, (255, 0, 0))
-        mana_spritesets = clip_set_to_dict(
+        mana_spritesets = clip_set_to_dict_on_xaxis(
             mana_spritesets, order)
 
         # Images

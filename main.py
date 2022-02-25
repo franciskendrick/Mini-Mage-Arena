@@ -83,8 +83,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [DarkMage()]
-    enemies = []
+    enemies = [DarkMage()]
+    # enemies = []
 
     # Supports
     mana_crystals = [ManaCrystal((100, 100))]

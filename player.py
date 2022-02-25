@@ -36,8 +36,8 @@ class Player:
 
         # Images
         self.images = {
-            "default": clip_set_to_list(spriteset),
-            "hit": clip_set_to_list(
+            "default": clip_set_to_list_on_xaxis(spriteset),
+            "hit": clip_set_to_list_on_xaxis(
                 palette_swap(spriteset.convert(), hit_palette))
         }
         self.image_used = "default"

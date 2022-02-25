@@ -39,7 +39,7 @@ class PlayerGauge:
         self.images = {}
         separated_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
         for name, separated_set in zip(order, separated_sets):
-            image = clip_set_to_list(separated_set)
+            image = clip_set_to_list_on_xaxis(separated_set)
             self.images[name] = image
         
         # Gauge Palette
