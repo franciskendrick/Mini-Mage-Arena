@@ -2,13 +2,14 @@ from windows import window
 from game import PlayerGauge, game
 from player import Player
 from enemies import DarkMage, Slime
+from supports import ManaCrystal
 import pygame
 import sys
 
 
 # Redraw
 def redraw_game():
-    display.fill((245, 245, 255))
+    display.fill((50, 50, 70))
 
     # Window
     game.draw_statbar_bg(display)
@@ -20,6 +21,10 @@ def redraw_game():
     # Enemies
     for enemy in enemies:
         enemy.draw(display)
+
+    # Supports
+    for mana in mana_crystals:
+        mana.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
@@ -82,7 +87,7 @@ if __name__ == "__main__":
     enemies = []
 
     # Supports
-    mana_crystals = []
+    mana_crystals = [ManaCrystal((100, 100))]
 
     # Execute
     game_loop()

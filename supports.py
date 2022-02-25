@@ -1,4 +1,3 @@
-from re import A
 from functions import *
 import pygame
 import os
@@ -14,13 +13,19 @@ class ManaCrystal:
         self.init_rect(center_pos)
 
     def init_images(self):
+        # Original Spriteset
         spriteset = pygame.image.load(
             path + "/assets/supports" + "/mana_crystals.png")
+
+        # Separated Spritesets
+        order = ["small", "medium", "large"]
         mana_spritesets = separate_sets_from_yaxis(
             spriteset, (255, 0, 0))
-        order = ["small", "medium", "large"]
-        self.type = 0
+        mana_spritesets = clip_set_to_dict(
+            mana_spritesets, order)
 
+        # Images
+        self.type = 2
         self.images = mana_spritesets[order[self.type]]
         self.idx = 0
 
@@ -31,7 +36,16 @@ class ManaCrystal:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
+        # Reset
+        if self.idx >= len(self.images) * 3:
+            self.idx = 0
+
+        # Draw
+        img = self.images[self.idx // 3]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
 
     # Update ------------------------------------------------------ #
     def update(self):
