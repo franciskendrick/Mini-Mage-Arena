@@ -80,7 +80,7 @@ class PlayerGauge:
         for (key, stat) in status_items:
             gauge_images = self.images["gauge"][key]
             for idx, data in enumerate(gauge_images):
-                data[0] = True if stat >= idx else False
+                data[0] = True if stat > idx else False
 
     # Functions --------------------------------------------------- #
     def gauge_palette(self):
