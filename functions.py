@@ -56,41 +56,41 @@ def clip(set, pos, size):
     return img
 
 
-def clip_set_to_list(set):
+# Clip ImageSet to List
+def clip_set_to_list_on_xaxis(set):
     images = []
 
     # Loop Over every Pixel in Tileset
-    for y in range(set.get_height()):
-        for x in range(set.get_width()):
-            pixel = set.get_at((x, y))
+    for x in range(set.get_width()):
+        pixel = set.get_at((x, 0))
 
-            # A Sprite/Tile is Found
-            if pixel == (255, 0, 255, 255):  # magenta
-                wd = 0
-                ht = 0
+        # A Sprite/Tile is Found
+        if pixel == (255, 0, 255, 255):  # magenta
+            wd = 0
+            ht = 0
 
-                # Find the End of Sprites/Tiles in the X Coordinate
-                while True:
-                    wd += 1
-                    pixel = set.get_at((x + wd, y))
-                    if pixel == (0, 255, 255, 255):  # cyan
-                        break
+            # Find the End of Sprites/Tiles in the X Coordinate
+            while True:
+                wd += 1
+                pixel = set.get_at((x + wd, 0))
+                if pixel == (0, 255, 255, 255):  # cyan
+                    break
 
-                # Find the End of Sprites/Tiles in the Y Coordinate
-                while True:
-                    ht += 1
-                    pixel = set.get_at((x, y + ht))
-                    if pixel == (0, 255, 255, 255):  # cyan
-                        break
+            # Find the End of Sprites/Tiles in the Y Coordinate
+            while True:
+                ht += 1
+                pixel = set.get_at((x, ht))
+                if pixel == (0, 255, 255, 255):  # cyan
+                    break
 
-                # Clip Image
-                img = clip(
-                    set,
-                    (x + 1, y + 1),
-                    (wd - 1, ht - 1))
+            # Clip Image
+            img = clip(
+                set,
+                (x + 1, 1),
+                (wd - 1, ht - 1))
 
-                # Append
-                images.append(img)
+            # Append
+            images.append(img)
 
     # Unpack Images if Less Than One
     [images] = [images] if len(images) > 1 else images
@@ -98,15 +98,67 @@ def clip_set_to_list(set):
     return images
 
 
-def clip_set_to_dict(sets, order):
+def clip_set_to_list_on_yaxis(set):
+    images = []
+
+    # Loop Over every Pixel in Tileset
+    for y in range(set.get_height()):
+        pixel = set.get_at((0, y))
+
+        # A Sprite/Tile is Found
+        if pixel == (255, 0, 255, 255):  # magenta
+            wd = 0
+            ht = 0
+
+            # Find the End of Sprites/Tiles in the X Coordinate
+            while True:
+                wd += 1
+                pixel = set.get_at((wd, y))
+                if pixel == (0, 255, 255, 255):  # cyan
+                    break
+
+            # Find the End of Sprites/Tiles in the Y Coordinate
+            while True:
+                ht += 1
+                pixel = set.get_at((0, y + ht))
+                if pixel == (0, 255, 255, 255):  # cyan
+                    break
+
+            # Clip Image
+            img = clip(
+                set,
+                (1, y + 1),
+                (wd - 1, ht - 1))
+
+            # Append
+            images.append(img)
+
+    # Unpack Images if Less Than One
+    [images] = [images] if len(images) > 1 else images
+
+    return images
+
+
+# Clip ImageSet to Dictionary
+def clip_set_to_dict_on_xaxis(sets, order):
     dict_images = {}
     for name, set in zip(order, sets):
-        image = clip_set_to_list(set)
+        image = clip_set_to_list_on_xaxis(set)
         dict_images[name] = image
     
     return dict_images
 
 
+def clip_set_to_dict_on_yaxis(sets, order):
+    dict_images = {}
+    for name, set in zip(order, sets):
+        image = clip_set_to_list_on_yaxis(set)
+        dict_images[name] = image
+    
+    return dict_images
+
+
+# Separate ImageSets
 def separate_sets_from_xaxis(set_img, separator_color):
     separated_sets = []
     current_wd = 0
