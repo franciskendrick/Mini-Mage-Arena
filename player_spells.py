@@ -11,6 +11,7 @@ class FireBall:
         self.init_color()
         self.init_movement(target)
         self.damage = 3
+        self.mana_cost = 1
         self.collided = False
 
     def init_color(self):

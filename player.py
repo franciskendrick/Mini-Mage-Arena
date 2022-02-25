@@ -202,11 +202,19 @@ class Player:
                     FireBall: (self.rect.center, pygame.mouse.get_pos())
                 }
 
+                # Attack
                 arguments = spell_arguments[self.spell_in_use]
                 attack = self.spell_in_use(*arguments)
 
-                self.attack_list.append(attack)
-                self.last_attack = time.time()
+                if self.stats["mana"] - attack.mana_cost >= 0:  # enough mana
+                    # Append
+                    self.attack_list.append(attack)
+
+                    # Mana
+                    self.stats["mana"] -= attack.mana_cost
+
+                    # Time
+                    self.last_attack = time.time()
 
     def update_attack(self, enemies):
         remove_attack = []
