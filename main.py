@@ -98,7 +98,8 @@ if __name__ == "__main__":
     enemies = []
 
     # Supports
-    mana_crystals = [ManaCrystal((100, 100))]
+    # mana_crystals = [ManaCrystal((100, 100))]
+    mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
 
     # Execute
     game_loop()

@@ -1,5 +1,6 @@
 from functions import *
 import pygame
+import random
 import os
 
 pygame.init()
@@ -11,6 +12,7 @@ class ManaCrystal:
     def __init__(self, center_pos):
         self.init_images()
         self.init_rect(center_pos)
+        self.init_drop()
         self.init_points()
         self.absorbed = False
 
@@ -36,6 +38,21 @@ class ManaCrystal:
         self.rect = pygame.Rect(0, 0, *img_rect.size)
         self.rect.center = center_pos
 
+    def init_drop(self):
+        # Speed & Angle
+        speed = random.randint(2, 5)
+        angle = math.atan2(
+            random.uniform(-1, 1),
+            random.uniform(-1, 1))
+
+        # Velocities
+        x_vel = math.cos(angle) * speed
+        y_vel = math.sin(angle) * speed
+        self.drop_velocities = [x_vel, y_vel]
+
+        # Status
+        self.dropped = True        
+
     def init_points(self):
         points_map = {0: 1, 1: 4, 2: 16}
         self.points = points_map[self.type]
@@ -55,7 +72,13 @@ class ManaCrystal:
 
     # Update ------------------------------------------------------ #
     def update(self, player):
+        self.movement(player)
         self.player_collision(player)
+
+    # Movement
+    def movement(self, player):
+        if self.dropped:
+            self.drop_movement()
 
     # Collisions
     def player_collision(self, player):
@@ -64,3 +87,81 @@ class ManaCrystal:
             self.absorbed = True
 
     # Functions --------------------------------------------------- #
+    # Drop 
+    def drop_movement(self):
+        # Get Velocities
+        x_vel, y_vel = self.drop_velocities
+
+        # Move
+        self.move_x(x_vel)
+        self.move_y(y_vel)
+
+        # Modify X Velocity
+        modify_x = random.uniform(0.2, 0.4)
+        if x_vel > 0:  # positive
+            x_vel = self.modify_positive_drop_xvel(
+                x_vel, modify_x)
+        else:  # negative
+            x_vel = self.modify_negative_drop_xvel(
+                x_vel, modify_x)
+
+        # Modify Y Velocity
+        modify_y = random.uniform(0.2, 0.4)
+        if y_vel > 0:  # positive
+            y_vel = self.modify_positive_drop_yvel(
+                y_vel, modify_y)
+        else:  # negative
+            y_vel = self.modify_negative_drop_yvel(
+                y_vel, modify_y)
+
+        # Update Drop Velocities
+        self.drop_velocities = [x_vel, y_vel]
+
+        # Update Dropped
+        if not x_vel and not y_vel:
+            self.dropped = False
+
+    def modify_positive_drop_xvel(self, x_vel, modify_x):
+        if x_vel - modify_x <= 0:
+            x_vel = 0
+        else:
+            x_vel -= modify_x
+
+        return x_vel
+
+    def modify_negative_drop_xvel(self, x_vel, modify_x):
+        if x_vel + modify_x > 0:
+            x_vel = 0
+        else:
+            x_vel += modify_x
+
+        return x_vel
+
+    def modify_positive_drop_yvel(self, y_vel, modify_y):
+        if y_vel - modify_y <= 0:
+            y_vel = 0
+        else:
+            y_vel -= modify_y
+
+        return y_vel
+
+    def modify_negative_drop_yvel(self, y_vel, modify_y):
+        if y_vel + modify_y > 0:
+            y_vel = 0
+        else:
+            y_vel += modify_y
+
+        return y_vel
+
+    # Movement
+    def move_x(self, vel):
+        handle_rect = self.rect.copy()
+        handle_rect.x += vel
+        if not rect_edge_collision(handle_rect):
+            self.rect.x += vel
+
+    def move_y(self, vel):
+        handle_rect = self.rect.copy()
+        handle_rect.y += vel
+        if not rect_edge_collision(handle_rect):
+            self.rect.y += vel
