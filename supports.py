@@ -11,6 +11,8 @@ class ManaCrystal:
     def __init__(self, center_pos):
         self.init_images()
         self.init_rect(center_pos)
+        self.init_points()
+        self.absorbed = False
 
     def init_images(self):
         # Original Spriteset
@@ -25,7 +27,7 @@ class ManaCrystal:
             mana_spritesets, order)
 
         # Images
-        self.type = 2
+        self.type = 0
         self.images = mana_spritesets[order[self.type]]
         self.idx = 0
 
@@ -33,6 +35,10 @@ class ManaCrystal:
         img_rect = self.images[self.idx].get_rect()
         self.rect = pygame.Rect(0, 0, *img_rect.size)
         self.rect.center = center_pos
+
+    def init_points(self):
+        points_map = {0: 1, 1: 4, 2: 16}
+        self.points = points_map[self.type]
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -48,7 +54,13 @@ class ManaCrystal:
         self.idx += 1
 
     # Update ------------------------------------------------------ #
-    def update(self):
-        pass
+    def update(self, player):
+        self.player_collision(player)
+
+    # Collisions
+    def player_collision(self, player):
+        if self.rect.colliderect(player.rect):
+            player.add_mana(self.points)
+            self.absorbed = True
 
     # Functions --------------------------------------------------- #

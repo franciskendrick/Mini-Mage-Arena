@@ -9,7 +9,7 @@ import sys
 
 # Redraw
 def redraw_game():
-    display.fill((50, 50, 70))
+    display.fill((100, 100, 120))
 
     # Window
     game.draw_statbar_bg(display)
@@ -55,6 +55,17 @@ def game_loop():
         for enemy in remove_enemies:
             enemies.remove(enemy)
         
+        # Mana Crystals
+        remove_mana = []
+        for mana in mana_crystals:
+            mana.update(player)
+            if mana.absorbed:
+                remove_mana.append(mana)
+
+        for mana in remove_mana:
+            if mana in mana_crystals:
+                mana_crystals.remove(mana)
+
         # Player Gauge
         player_gauge.update(player.stats)
 
@@ -83,8 +94,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [DarkMage()]
-    # enemies = []
+    # enemies = [DarkMage()]
+    enemies = []
 
     # Supports
     mana_crystals = [ManaCrystal((100, 100))]

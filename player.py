@@ -235,3 +235,9 @@ class Player:
 
         self.image_used = "hit"
         self.last_hit = time.time()
+
+    # Support 
+    def add_mana(self, points):
+        self.stats["mana"] += points
+        if self.stats["mana"] >= self.maximum_stats["mana"]:
+            self.stats["mana"] = self.maximum_stats["mana"]
