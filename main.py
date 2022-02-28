@@ -50,6 +50,7 @@ def game_loop():
             enemy.update(player)
 
             if enemy.is_dead:
+                enemy.mana_reward(mana_crystals)
                 remove_enemies.append(enemy)
 
         for enemy in remove_enemies:
@@ -94,12 +95,12 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [DarkMage()]
+    # enemies = [Slime()]
     enemies = []
 
     # Supports
-    # mana_crystals = [ManaCrystal((100, 100))]
-    mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
+    # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
+    mana_crystals = []
 
     # Execute
     game_loop()

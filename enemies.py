@@ -1,6 +1,7 @@
 from functions import *
 from windows import window
 from enemy_spells import DarkFireBall
+from supports import ManaCrystal
 import pygame
 import time
 import os
@@ -65,6 +66,7 @@ class Slime:
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
+        self.max_health = 12
         self.health = 12
         self.is_dead = False
 
@@ -161,6 +163,11 @@ class Slime:
         self.image_used = "hit"
         self.last_hit = time.time()
 
+    # Mana
+    def mana_reward(self, mana_crystals):
+        for _ in range(round(self.max_health * 1.5)):
+            mana_crystals.append(ManaCrystal(self.rect.center))
+
 
 class DarkMage:
     # Initialize -------------------------------------------------- #
@@ -214,6 +221,7 @@ class DarkMage:
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
+        self.max_health = 20
         self.health = 20
         self.is_dead = False
 
@@ -303,3 +311,8 @@ class DarkMage:
         
         self.image_used = "hit"
         self.last_hit = time.time()
+
+    # Mana
+    def mana_reward(self, mana_crystals):
+        for _ in range(round(self.max_health * 1.5)):
+            mana_crystals.append(ManaCrystal(self.rect.center))
