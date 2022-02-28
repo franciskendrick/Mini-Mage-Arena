@@ -95,12 +95,12 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [Slime()]
+    # enemies = [DarkMage()]
     enemies = []
 
     # Supports
-    # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
-    mana_crystals = []
+    mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
+    # mana_crystals = []
 
     # Execute
     game_loop()

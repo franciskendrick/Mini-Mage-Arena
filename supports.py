@@ -13,6 +13,7 @@ class ManaCrystal:
         self.init_images()
         self.init_rect(center_pos)
         self.init_drop()
+        self.init_playermagnet()
         self.init_points()
         self.absorbed = False
 
@@ -53,6 +54,17 @@ class ManaCrystal:
         # Status
         self.dropped = True        
 
+    def init_playermagnet(self):
+        # Range
+        self.magent_range = Circle(
+            self.rect.center, 56)
+
+        # Distance
+        keys = [key for key in range(56 + 1)]
+        values = [value for value in reversed(range(56 + 1))]
+        self.invert_distance = {
+            key: value for key, value in zip(keys, values)}
+
     def init_points(self):
         points_map = {0: 1, 1: 4, 2: 16}
         self.points = points_map[self.type]
@@ -70,6 +82,11 @@ class ManaCrystal:
         # Update
         self.idx += 1
 
+        # !!!
+        center = self.magent_range.center
+        radius = self.magent_range.radius
+        pygame.draw.circle(display, (0, 0, 255), center, radius, 1)
+
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.movement(player)
@@ -79,6 +96,9 @@ class ManaCrystal:
     def movement(self, player):
         if self.dropped:
             self.drop_movement()
+        self.player_magnet(player)
+
+        self.magent_range.center = self.rect.center
 
     # Collisions
     def player_collision(self, player):
@@ -153,6 +173,13 @@ class ManaCrystal:
 
         return y_vel
 
+    # Mana to Player Magnet
+    def player_magnet(self, player):
+        if self.magent_range.colliderect(player.rect):
+            x_vel, y_vel = self.get_velocities(player.rect.center)
+            self.move_x(x_vel)
+            self.move_y(y_vel)
+
     # Movement
     def move_x(self, vel):
         handle_rect = self.rect.copy()
@@ -165,3 +192,24 @@ class ManaCrystal:
         handle_rect.y += vel
         if not rect_edge_collision(handle_rect):
             self.rect.y += vel
+
+    def get_velocities(self, target):
+        target_x, target_y = target
+
+        # Get Speed
+        distance = math.hypot(
+            self.rect.centerx - target_x, self.rect.centery - target_y)
+        distance_lookup = int(round(distance / window.enlarge, 0))
+        speed = self.invert_distance[distance_lookup] / 8
+
+        # Get Direction
+        angle = math.atan2(
+            target_y - self.rect.centery,
+            target_x - self.rect.centerx)
+
+        # Get Velocities
+        x_vel = math.cos(angle) * speed
+        y_vel = math.sin(angle) * speed
+
+        # Return
+        return (x_vel, y_vel)
