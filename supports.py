@@ -1,6 +1,7 @@
 from functions import *
 import pygame
 import random
+import math
 import os
 
 pygame.init()
@@ -23,15 +24,15 @@ class ManaCrystal:
             path + "/assets/supports" + "/mana_crystals.png")
 
         # Separated Spritesets
-        order = ["small", "medium", "large"]
+        self.order = ["small", "medium", "large"]
         mana_spritesets = separate_sets_from_yaxis(
             spriteset, (255, 0, 0))
-        mana_spritesets = clip_set_to_dict_on_xaxis(
-            mana_spritesets, order)
+        self.mana_spritesets = clip_set_to_dict_on_xaxis(
+            mana_spritesets, self.order)
 
         # Images
         self.type = 0
-        self.images = mana_spritesets[order[self.type]]
+        self.images = self.mana_spritesets[self.order[self.type]]
         self.idx = 0
 
     def init_rect(self, center_pos):
@@ -66,8 +67,8 @@ class ManaCrystal:
             key: value for key, value in zip(keys, values)}
 
     def init_points(self):
-        points_map = {0: 1, 1: 4, 2: 16}
-        self.points = points_map[self.type]
+        self.points_map = {0: 1, 1: 4, 2: 16}
+        self.points = self.points_map[self.type]
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -88,14 +89,16 @@ class ManaCrystal:
         pygame.draw.circle(display, (0, 0, 255), center, radius, 1)
 
     # Update ------------------------------------------------------ #
-    def update(self, player):
-        self.movement(player)
+    def update(self, player, mana_crystals):
+        self.movement(player, mana_crystals)
         self.player_collision(player)
 
     # Movement
-    def movement(self, player):
+    def movement(self, player, mana_crystals):
         if self.dropped:
             self.drop_movement()
+        else:
+            self.fusion_magnet(mana_crystals)
         self.player_magnet(player)
 
         self.magent_range.center = self.rect.center
@@ -172,6 +175,43 @@ class ManaCrystal:
             y_vel += modify_y
 
         return y_vel
+
+    # Fusion Magnet
+    def fusion_magnet(self, mana_crystals):
+        remove_mana = []
+        handle_crystals = mana_crystals.copy()
+        handle_crystals.remove(self)
+        for mana in handle_crystals:
+            # New Mana is in Magnet Range of Current Mana
+            newmana_in_magnetrange = self.magent_range.colliderect(mana.rect)
+            # Current Not at Maximum 
+            not_at_max = self.type < 2
+            # Current Mana and New Mana are Same Types 
+            same_types = self.type == mana.type
+            # "Current Points + Fusing Points" is in the Next Level of Crystals
+            newpoint_in_nextlevel = self.points + mana.points <= self.points_map[self.type+1]
+            
+            # if All that has been Said is True
+            if newmana_in_magnetrange and not_at_max and same_types and newpoint_in_nextlevel:
+                # Current Mana has not Collided with New Mana 
+                if not self.rect.colliderect(mana.rect):
+                    # Move
+                    x_vel, y_vel = self.get_velocities(mana.rect.center)
+                    self.move_x(x_vel / 10)
+                    self.move_y(y_vel / 10)
+                # Mana has Collided with New Mana
+                else:
+                    # Fuse
+                    self.points += mana.points
+                    if self.points >= self.points_map[self.type+1]:
+                        self.type += 1
+                        self.images = self.mana_spritesets[self.order[self.type]]
+
+                    mana.absorbed = True
+                    remove_mana.append(mana)
+
+        for mana in remove_mana:
+            mana_crystals.remove(mana)
 
     # Mana to Player Magnet
     def player_magnet(self, player):

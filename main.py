@@ -59,7 +59,7 @@ def game_loop():
         # Mana Crystals
         remove_mana = []
         for mana in mana_crystals:
-            mana.update(player)
+            mana.update(player, mana_crystals)
             if mana.absorbed:
                 remove_mana.append(mana)
 
