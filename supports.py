@@ -8,6 +8,36 @@ pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
 
 
+class HealingPotion:
+    # Initialize -------------------------------------------------- #
+    def __init__(self):
+        self.init_images()
+
+    def init_images(self):
+        # Original Spriteset
+        spriteset = pygame.image.load(
+            path + "/assets/supports" + "/healing_potion.png")
+
+        # Separated Spritesets
+        self.order = ["small", "medium", "large"]
+        potion_spritesets = separate_sets_from_yaxis(
+            spriteset, (255, 0, 0))
+        self.mana_spritesets = clip_set_to_dict_on_xaxis(
+            potion_spritesets, self.order)
+
+        # Images
+        self.images = self.mana_spritesets[self.order[0]]
+        self.idx = 0
+
+    # Draw -------------------------------------------------------- #
+    def draw(self, display):
+        pass
+
+    # Update ------------------------------------------------------ #
+    def update(self):
+        pass
+
+
 class ManaCrystal:
     # Initialize -------------------------------------------------- #
     def __init__(self, center_pos):
