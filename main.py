@@ -25,7 +25,7 @@ def redraw_game():
     # Supports
     for mana in mana_crystals:
         mana.draw(display)
-    for potion in healing_potion:
+    for potion in healing_potions:
         potion.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
@@ -69,6 +69,17 @@ def game_loop():
             if mana in mana_crystals:
                 mana_crystals.remove(mana)
 
+        # Healing Potion
+        remove_potion = []
+        for potion in healing_potions:
+            potion.update(player)
+            if potion.absorbed:
+                remove_potion.append(potion)
+
+        for potion in remove_potion:
+            if potion in healing_potions:
+                healing_potions.remove(potion)
+
         # Player Gauge
         player_gauge.update(player.stats)
 
@@ -97,15 +108,15 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [DarkMage()]
-    enemies = []
+    enemies = [DarkMage()]
+    # enemies = []
 
     # Supports
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
     mana_crystals = []
 
-    healing_potion = [HealingPotion()]
-    # healing_potion = []
+    healing_potions = [HealingPotion()]
+    # healing_potions = []
 
     # Execute
     game_loop()

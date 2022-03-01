@@ -237,6 +237,11 @@ class Player:
         self.last_hit = time.time()
 
     # Support 
+    def add_health(self, points):
+        self.stats["health"] += points
+        if self.stats["health"] >= self.maximum_stats["health"]:
+            self.stats["health"] = self.maximum_stats["health"]
+
     def add_mana(self, points):
         self.stats["mana"] += points
         if self.stats["mana"] >= self.maximum_stats["mana"]:

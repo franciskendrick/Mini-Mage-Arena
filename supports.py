@@ -13,6 +13,8 @@ class HealingPotion:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.init_points()
+        self.absorbed = False
 
     def init_images(self):
         # Original Spriteset
@@ -35,6 +37,10 @@ class HealingPotion:
         img_rect = self.images[self.idx].get_rect()
         self.rect = pygame.Rect(200, 200, *img_rect.size)
 
+    def init_points(self):
+        points_map = {0: 2, 1: 4, 2: 6}
+        self.points = points_map[self.type]
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
@@ -49,8 +55,14 @@ class HealingPotion:
         self.idx += 1
 
     # Update ------------------------------------------------------ #
-    def update(self):
-        pass
+    def update(self, player):
+        self.player_collision(player)
+
+    # Collisions
+    def player_collision(self, player):
+        if self.rect.colliderect(player.rect):
+            player.add_health(self.points)
+            self.absorbed = True
 
 
 class ManaCrystal:
