@@ -12,6 +12,7 @@ class HealingPotion:
     # Initialize -------------------------------------------------- #
     def __init__(self):
         self.init_images()
+        self.init_rect()
 
     def init_images(self):
         # Original Spriteset
@@ -26,12 +27,26 @@ class HealingPotion:
             potion_spritesets, self.order)
 
         # Images
-        self.images = self.mana_spritesets[self.order[0]]
+        self.type = 0
+        self.images = self.mana_spritesets[self.order[self.type]]
         self.idx = 0
+
+    def init_rect(self):
+        img_rect = self.images[self.idx].get_rect()
+        self.rect = pygame.Rect(200, 200, *img_rect.size)
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
+        # Reset
+        if self.idx >= len(self.images) * 3:
+            self.idx = 0
+
+        # Draw
+        img = self.images[self.idx // 3]
+        display.blit(img, self.rect)
+
+        # Update 
+        self.idx += 1
 
     # Update ------------------------------------------------------ #
     def update(self):

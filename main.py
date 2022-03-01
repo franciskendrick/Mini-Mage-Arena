@@ -2,7 +2,7 @@ from windows import window
 from game import PlayerGauge, game
 from player import Player
 from enemies import DarkMage, Slime
-from supports import ManaCrystal
+from supports import HealingPotion, ManaCrystal
 import pygame
 import sys
 
@@ -25,6 +25,8 @@ def redraw_game():
     # Supports
     for mana in mana_crystals:
         mana.draw(display)
+    for potion in healing_potion:
+        potion.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
@@ -99,8 +101,11 @@ if __name__ == "__main__":
     enemies = []
 
     # Supports
-    mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
-    # mana_crystals = []
+    # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
+    mana_crystals = []
+
+    healing_potion = [HealingPotion()]
+    # healing_potion = []
 
     # Execute
     game_loop()
