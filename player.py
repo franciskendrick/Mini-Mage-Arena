@@ -70,7 +70,7 @@ class Player:
         
         # Time 
         self.last_attack = time.time()
-        self.attack_limit = 500  # milliseconds
+        self.attack_cooldown = 500  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.time()
@@ -197,7 +197,7 @@ class Player:
         left_click, _, _ = pygame.mouse.get_pressed()
         if left_click:  # left click is pressed 
             dt = time.time() - self.last_attack
-            if dt * 1000 >= self.attack_limit:  # spam limit
+            if dt * 1000 >= self.attack_cooldown:  # cooldown
                 spell_arguments = {
                     FireBall: (self.rect.center, pygame.mouse.get_pos())
                 }

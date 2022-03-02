@@ -59,7 +59,7 @@ class Slime:
         
         # Time
         self.last_attack = time.time()
-        self.attack_limit = 750  # milliseconds
+        self.attack_cooldown = 750  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.time()
@@ -113,7 +113,7 @@ class Slime:
     def attack(self, player):
         if self.rect.colliderect(player.rect):
             dt = time.time() - self.last_attack
-            if dt * 1000 >= self.attack_limit:  # spam limit
+            if dt * 1000 >= self.attack_cooldown:  # cooldown
                 player.hit(self.damage)
                 self.last_attack = time.time()
 
@@ -214,7 +214,7 @@ class DarkMage:
 
         # Time
         self.last_attack = time.time()
-        self.attack_limit = 1_200  # milliseconds
+        self.attack_cooldown = 1_200  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.time()
@@ -280,7 +280,7 @@ class DarkMage:
     # Attacks
     def append_attack(self, player):
         dt = time.time() - self.last_attack
-        if dt * 1000 >= self.attack_limit:  # spam limit
+        if dt * 1000 >= self.attack_cooldown:  # cooldown
             target = (
                 player.rect.centerx * window.enlarge,
                 player.rect.centery * window.enlarge)
