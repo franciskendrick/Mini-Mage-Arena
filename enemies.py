@@ -316,3 +316,41 @@ class DarkMage:
     def mana_reward(self, mana_crystals):
         for _ in range(round(self.max_health * 1.5)):
             mana_crystals.append(ManaCrystal(self.rect.center))
+
+
+class Mushroom:
+    # Initialize -------------------------------------------------- #
+    def __init__(self):
+        self.init_images()
+
+    def init_images(self):
+        # Spriteset
+        spriteset = pygame.image.load(
+            path + "/assests/sprites" + "/mushroom.png")
+        self.idx = 0
+
+        # Palettes
+        hit_palette = {
+            (9, 10, 20): (9, 10, 20),
+            (30, 29, 57): (168, 181, 178),
+            (64, 39, 81): (199, 207, 204),
+            (122, 54, 123): (235, 237, 233),
+            (215, 181, 148): (168, 181, 178),
+            (231, 213, 179): (199, 207, 204),
+            (235, 237, 233): (235, 237, 233)}
+
+        # Images
+        self.images = {
+            "default": clip_set_to_list_on_xaxis(spriteset),
+            "hit": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), hit_palette))
+        }
+        self.images_used = "default"
+
+    # Draw -------------------------------------------------------- #
+    def draw(self, display):
+        pass
+
+    # Update ------------------------------------------------------ #
+    def update(self):
+        pass
