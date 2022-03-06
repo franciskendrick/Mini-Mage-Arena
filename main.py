@@ -1,7 +1,7 @@
 from windows import window
 from game import PlayerGauge, game
 from player import Player
-from enemies import DarkMage, Slime
+from enemies import DarkMage, Mushroom, Slime
 from supports import HealingPotion, ManaCrystal
 import pygame
 import sys
@@ -108,15 +108,15 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [DarkMage()]
+    enemies = [Mushroom()]
     # enemies = []
 
     # Supports
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
     mana_crystals = []
 
-    healing_potions = [HealingPotion()]
-    # healing_potions = []
+    # healing_potions = [HealingPotion()]
+    healing_potions = []
 
     # Execute
     game_loop()

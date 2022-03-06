@@ -322,11 +322,13 @@ class Mushroom:
     # Initialize -------------------------------------------------- #
     def __init__(self):
         self.init_images()
+        self.init_rect()
+        self.is_dead = False
 
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assests/sprites" + "/mushroom.png")
+            path + "/assets/sprites" + "/mushroom.png")
         self.idx = 0
 
         # Palettes
@@ -345,12 +347,26 @@ class Mushroom:
             "hit": clip_set_to_list_on_xaxis(
                 palette_swap(spriteset.convert(), hit_palette))
         }
-        self.images_used = "default"
+        self.image_used = "default"
+
+    def init_rect(self):
+        size = self.images[self.image_used][self.idx].get_rect().size
+        self.rect = pygame.Rect(100, 100, *size)
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
+        # Reset
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
+            self.idx = 0
+
+        # Draw
+        img = imgs[self.idx // 5]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
 
     # Update ------------------------------------------------------ #
-    def update(self):
+    def update(self, player):
         pass
