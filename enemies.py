@@ -455,7 +455,8 @@ class Fireshroom:
     # Initialize -------------------------------------------------- #
     def __init__(self):
         self.init_images()
-        self.init_draw()
+        self.init_rect()
+        self.init_direction()
         self.is_dead = False
 
     def init_images(self):
@@ -486,6 +487,9 @@ class Fireshroom:
         size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
 
+    def init_direction(self):
+        self.direction = None
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
@@ -493,8 +497,12 @@ class Fireshroom:
         if self.idx >= len(imgs) * 5:
             self.idx = 0
 
-        # Draw
+        # Direction
         img = imgs[self.idx // 5]
+        if self.direction == "left":
+            img = pygame.transform.flip(img, True, False)
+
+        # Draw
         display.blit(img, self.rect)
 
         # Update
@@ -502,6 +510,13 @@ class Fireshroom:
 
     # Update ------------------------------------------------------ #
     def update(self, player):
-        pass
+        self.facing(player)
+
+    # Direction
+    def facing(self, player):
+        if self.rect.centerx - player.rect.centerx > 0:  # left
+            self.direction = "left"
+        else:  # right
+            self.direction = "right"
 
     # Functions --------------------------------------------------- #
