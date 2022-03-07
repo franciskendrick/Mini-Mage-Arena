@@ -482,14 +482,24 @@ class Fireshroom:
         }
         self.image_used = "default"
 
-    def init_draw(self):
+    def init_rect(self):
         size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
-    
+        # Reset
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
+            self.idx = 0
+
+        # Draw
+        img = imgs[self.idx // 5]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
+
     # Update ------------------------------------------------------ #
     def update(self, player):
         pass
