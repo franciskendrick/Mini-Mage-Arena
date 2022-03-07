@@ -360,10 +360,17 @@ class Mushroom:
         self.direction = None
 
     def init_attack(self):
+        # Damage
+        self.damage = 1
+
         # Range
         self.attack_range = Circle(
             self.rect.center, 80)
         self.range_visibility = False
+
+        # Time
+        self.last_attack = time.time()
+        self.attack_cooldown = 1_000  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.time()
@@ -414,6 +421,10 @@ class Mushroom:
     def attack(self, player):
         if self.attack_range.colliderect(player.rect):
             self.range_visibility = True
+            dt = time.time() - self.last_attack
+            if dt * 1000 >= self.attack_cooldown:  # cooldown
+                player.hit(self.damage)
+                self.last_attack = time.time()
         else:
             self.range_visibility = False
 
