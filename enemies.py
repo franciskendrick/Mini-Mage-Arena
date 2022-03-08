@@ -626,3 +626,58 @@ class Fireshroom:
     def mana_reward(self, mana_crystals):
         for _ in range(round(self.max_health * 1.5)):
             mana_crystals.append(ManaCrystal(self.rect.center))
+
+
+class Boomshroom:
+    # Initialize -------------------------------------------------- #
+    def __init__(self):
+        self.init_images()
+        self.init_rect()
+        self.is_dead = False
+
+    def init_images(self):
+        # Spriteset
+        spriteset = pygame.image.load(
+            path + "/assets/sprites" + "/boomshroom.png")
+        self.idx = 0
+
+        # Palettes
+        hit_palette = {
+            (9, 10, 20): (9, 10, 20),
+            (16, 20, 31): (168, 181, 178),
+            (21, 29, 40): (199, 207, 204),
+            (32, 46, 55): (168, 181, 178),
+            (57, 74, 80): (199, 207, 204),
+            (165, 48, 48): (235, 237, 233)}
+
+        # Images
+        self.images = {
+            "default": clip_set_to_list_on_xaxis(spriteset),
+            "hit": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), hit_palette))
+        }
+        self.image_used = "default"
+
+    def init_rect(self):
+        size = self.images[self.image_used][self.idx].get_rect().size
+        self.rect = pygame.Rect(100, 100, *size)
+
+    # Draw -------------------------------------------------------- #
+    def draw(self, display):
+        # Reset
+        imgs = self.images[self.image_used]
+        if self.idx >= len(imgs) * 5:
+            self.idx = 0
+
+        # Draw
+        img = imgs[self.idx // 5]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
+
+    # Update ------------------------------------------------------ #
+    def update(self, player):
+        pass
+
+    # Functions --------------------------------------------------- #

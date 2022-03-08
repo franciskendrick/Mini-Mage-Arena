@@ -1,7 +1,7 @@
 from windows import window
 from game import PlayerGauge, game
 from player import Player
-from enemies import DarkMage, Fireshroom, Mushroom, Slime
+from enemies import Boomshroom, DarkMage, Fireshroom, Mushroom, Slime
 from supports import HealingPotion, ManaCrystal
 import pygame
 import sys
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [Fireshroom()]
+    enemies = [Boomshroom()]
     # enemies = []
 
     # Supports
