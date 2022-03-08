@@ -254,7 +254,7 @@ class DarkMage:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
-        self.attacks(player)
+        self.attack(player)
         self.hit_timer()
 
     # Direction
@@ -265,7 +265,7 @@ class DarkMage:
             self.direction = "right"
 
     # Attack
-    def attacks(self, player):
+    def attack(self, player):
         self.append_attack(player)
         self.update_attack(player)
 
@@ -417,7 +417,7 @@ class Mushroom:
         else:  # right
             self.direction = "right"
 
-    # Movement
+    # Attack
     def attack(self, player):
         if self.attack_range.colliderect(player.rect):
             self.range_visibility = True
@@ -457,6 +457,7 @@ class Fireshroom:
         self.init_images()
         self.init_rect()
         self.init_direction()
+        self.init_attack()
         self.init_hit()
         self.init_status()
 
@@ -491,6 +492,12 @@ class Fireshroom:
     def init_direction(self):
         self.direction = None
 
+    def init_attack(self):
+        # Range
+        self.attack_range = Circle(
+            self.rect.center, 80)
+        self.range_visibility = False
+
     def init_hit(self):
         self.last_hit = time.time()
         self.hit_time = 300  # milliseconds
@@ -514,6 +521,11 @@ class Fireshroom:
 
         # Draw
         display.blit(img, self.rect)
+        if self.range_visibility:
+            center = self.attack_range.center
+            radius = self.attack_range.radius
+            pygame.draw.circle(
+                display, (165, 48, 48), center, radius, 1)
 
         # Update
         self.idx += 1
@@ -521,6 +533,7 @@ class Fireshroom:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.attack(player)
         self.hit_timer()
 
     # Direction
@@ -529,6 +542,13 @@ class Fireshroom:
             self.direction = "left"
         else:  # right
             self.direction = "right"
+
+    # Attack
+    def attack(self, player):
+        if self.attack_range.colliderect(player.rect):
+            self.range_visibility = True
+        else:
+            self.range_visibility = False
 
     # Hit
     def hit_timer(self):
