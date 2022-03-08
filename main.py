@@ -7,7 +7,7 @@ import pygame
 import sys
 
 
-# Redraw
+# Redrawd
 def redraw_game():
     display.fill((100, 100, 120))
 

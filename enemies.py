@@ -498,6 +498,25 @@ class Fireshroom:
             self.rect.center, 80)
         self.range_visibility = False
 
+        # Targets
+        target_directions = [
+            (x, y) for x in range(-1, 2) for y in range(-1, 2) if (x, y) != (0, 0)
+        ]
+
+        self.targets = []
+        for direction in target_directions:
+            target = (
+                (self.rect.centerx * window.enlarge) + direction[0],
+                (self.rect.centery * window.enlarge) + direction[1])
+            self.targets.append(target) 
+
+        # Attack List
+        self.attack_list = []
+
+        # Time
+        self.last_attack = time.time()
+        self.attack_cooldown = 1_200  # milliseconds
+
     def init_hit(self):
         self.last_hit = time.time()
         self.hit_time = 300  # milliseconds
@@ -509,6 +528,10 @@ class Fireshroom:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
+        self.draw_sprite(display)
+        self.draw_attacks(display)
+
+    def draw_sprite(self, display):
         # Reset
         imgs = self.images[self.image_used]
         if self.idx >= len(imgs) * 5:
@@ -521,14 +544,21 @@ class Fireshroom:
 
         # Draw
         display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
+
+    def draw_attacks(self, display):
+        # Range
         if self.range_visibility:
             center = self.attack_range.center
             radius = self.attack_range.radius
             pygame.draw.circle(
                 display, (165, 48, 48), center, radius, 1)
 
-        # Update
-        self.idx += 1
+        # Attacks
+        for attack in self.attack_list:
+            attack.draw(display)
 
     # Update ------------------------------------------------------ #
     def update(self, player):
@@ -547,8 +577,10 @@ class Fireshroom:
     def attack(self, player):
         if self.attack_range.colliderect(player.rect):
             self.range_visibility = True
+            self.append_attack()
         else:
             self.range_visibility = False
+        self.update_attack(player)
 
     # Hit
     def hit_timer(self):
@@ -558,6 +590,29 @@ class Fireshroom:
                 self.image_used = "default"
 
     # Functions --------------------------------------------------- #
+    # Attacks
+    def append_attack(self):
+        dt = time.time() - self.last_attack
+        if dt * 1000 >= self.attack_cooldown:  # cooldown
+            for target in self.targets:
+                attack = DarkFireBall(self.rect.center, target)
+            
+                self.attack_list.append(attack)
+                self.last_attack = time.time()
+
+    def update_attack(self, player):
+        remove_attack = []
+
+        # Update Attacks
+        for attack in self.attack_list:
+            attack.update(player)
+            if attack.collided:
+                remove_attack.append(attack)
+
+        # Remove Attacks
+        for attack in remove_attack:
+            self.attack_list.remove(attack)
+
     # Hit
     def hit(self, damage):
         self.health -= damage
