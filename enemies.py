@@ -496,7 +496,7 @@ class Fireshroom:
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
-        self.max_limit = 12
+        self.max_health = 12
         self.health = 12
         self.is_dead = False
 
@@ -546,3 +546,8 @@ class Fireshroom:
 
         self.image_used = "hit"
         self.last_hit = time.time()
+
+    # Mana
+    def mana_reward(self, mana_crystals):
+        for _ in range(round(self.max_health * 1.5)):
+            mana_crystals.append(ManaCrystal(self.rect.center))
