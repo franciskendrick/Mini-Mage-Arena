@@ -19,7 +19,7 @@ class HealingPotion:
     def init_images(self):
         # Original Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/supports" + "/healing_potion.png")
+            f"{path}/assets/supports/healing_potion.png")
 
         # Separated Spritesets
         self.order = ["small", "medium", "large"]
@@ -78,7 +78,7 @@ class ManaCrystal:
     def init_images(self):
         # Original Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/supports" + "/mana_crystals.png")
+            f"{path}/assets/supports/mana_crystals.png")
 
         # Separated Spritesets
         self.order = ["small", "medium", "large"]

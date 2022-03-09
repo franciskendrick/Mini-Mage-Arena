@@ -14,7 +14,7 @@ win_size = (
 win = pygame.display.set_mode(win_size)
 
 # Json
-json_file = open(path + r"/data" + r"/game.json")
+json_file = open(f"{path}/data/game.json")
 game_data = json.load(json_file)
 json_file.close()
 
@@ -32,7 +32,7 @@ class PlayerGauge:
 
     def init_images(self):
         spriteset = pygame.image.load(
-            path + "/assets/windows" + "/playergauge.png")
+            f"{path}/assets/windows/playergauge.png")
         order = ["bar", "icon", "gauge"]
 
         # Images

@@ -23,7 +23,7 @@ class Player:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/player_mage.png")
+            f"{path}/assets/sprites/player_mage.png")
         self.idx = 0
 
         # Palettes

@@ -24,7 +24,7 @@ class Slime:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/slime.png")
+            f"{path}/assets/sprites/slime.png")
         self.idx = 0
 
         # Palettes
@@ -182,7 +182,7 @@ class DarkMage:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/dark_mage.png")
+            f"{path}/assets/sprites/dark_mage.png")
         self.idx = 0
 
         # Palettes
@@ -331,7 +331,7 @@ class Mushroom:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/mushroom.png")
+            f"{path}/assets/sprites/mushroom.png")
         self.idx = 0
 
         # Palettes
@@ -464,7 +464,7 @@ class Fireshroom:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/fireshroom.png")
+            f"{path}/assets/sprites/fireshroom.png")
         self.idx = 0
 
         # Palettes
@@ -640,7 +640,7 @@ class Boomshroom:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            path + "/assets/sprites" + "/boomshroom.png")
+            f"{path}/assets/sprites/boomshroom.png")
         self.idx = 0
 
         # Palettes
