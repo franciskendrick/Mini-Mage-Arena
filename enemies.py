@@ -634,7 +634,8 @@ class Boomshroom:
         self.init_images()
         self.init_rect()
         self.init_direction()
-        self.is_dead = False
+        self.init_hit()
+        self.init_status()
 
     def init_images(self):
         # Spriteset
@@ -666,6 +667,15 @@ class Boomshroom:
     def init_direction(self):
         self.direction = None
 
+    def init_hit(self):
+        self.last_hit = time.time()
+        self.hit_time = 300  # milliseconds
+
+    def init_status(self):
+        self.max_health = 12
+        self.health = 12
+        self.is_dead = False
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
@@ -687,6 +697,7 @@ class Boomshroom:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.hit_timer()
 
     # Direction
     def facing(self, player):
@@ -695,4 +706,19 @@ class Boomshroom:
         else:  # right
             self.direction = "right"
 
+    # Hit 
+    def hit_timer(self):
+        if self.image_used == "hit":
+            dt = time.time() - self.last_hit
+            if dt * 1000 >= self.hit_time:
+                self.image_used = "default"
+
     # Functions --------------------------------------------------- #
+    # Hit
+    def hit(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.is_dead = True
+
+        self.image_used = "hit"
+        self.last_hit = time.time()
