@@ -1,13 +1,13 @@
 from windows import window
 from game import PlayerGauge, game
 from player import Player
-from enemies import Boomshroom, DarkMage, Fireshroom, Mushroom, Slime
+from enemies import Slime
 from supports import HealingPotion, ManaCrystal
 import pygame
 import sys
 
 
-# Redrawd
+# Redraw
 def redraw_game():
     display.fill((100, 100, 120))
 
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [Boomshroom()]
+    enemies = [Slime()]
     # enemies = []
 
     # Supports
