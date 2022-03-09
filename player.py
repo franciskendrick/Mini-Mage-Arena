@@ -55,7 +55,7 @@ class Player:
         self.sprint_vel = 5
 
         # Time
-        self.last_sprint = time.time()
+        self.last_sprint = time.perf_counter()
         self.stamina_time = 500  # milliseconds
 
     def init_attack(self):
@@ -69,11 +69,11 @@ class Player:
         self.attack_list = []
         
         # Time 
-        self.last_attack = time.time()
+        self.last_attack = time.perf_counter()
         self.attack_cooldown = 500  # milliseconds
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds 
 
     def init_status(self):
@@ -149,7 +149,7 @@ class Player:
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
@@ -162,21 +162,21 @@ class Player:
                 vel = self.sprint_vel
 
                 # Update Stamina Stat
-                dt = time.time() - self.last_sprint
+                dt = time.perf_counter() - self.last_sprint
                 if dt * 1000 >= self.stamina_time:
                     self.stats["stamina"] -= 1
-                    self.last_sprint = time.time()
+                    self.last_sprint = time.perf_counter()
             else:  # no stamina
                 vel = self.walk_vel
         else:  # shift is up
             vel = self.walk_vel
 
             # Update Stamina Stat
-            dt = time.time() - self.last_sprint
+            dt = time.perf_counter() - self.last_sprint
             if dt * 1000 >= self.stamina_time:
                 if self.stats["stamina"] < 20:
                     self.stats["stamina"] += 1
-                self.last_sprint = time.time()
+                self.last_sprint = time.perf_counter()
             
         return vel
 
@@ -196,7 +196,7 @@ class Player:
     def append_attack(self):
         left_click, _, _ = pygame.mouse.get_pressed()
         if left_click:  # left click is pressed 
-            dt = time.time() - self.last_attack
+            dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 spell_arguments = {
                     FireBall: (self.rect.center, pygame.mouse.get_pos())
@@ -214,7 +214,7 @@ class Player:
                     self.stats["mana"] -= attack.mana_cost
 
                     # Time
-                    self.last_attack = time.time()
+                    self.last_attack = time.perf_counter()
 
     def update_attack(self, enemies):
         remove_attack = []
@@ -234,7 +234,7 @@ class Player:
         self.stats["health"] -= damage
 
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Support 
     def add_health(self, points):

@@ -58,11 +58,11 @@ class Slime:
         self.damage = 1
         
         # Time
-        self.last_attack = time.time()
+        self.last_attack = time.perf_counter()
         self.attack_cooldown = 750  # milliseconds
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
@@ -112,15 +112,15 @@ class Slime:
     # Attack
     def attack(self, player):
         if self.rect.colliderect(player.rect):
-            dt = time.time() - self.last_attack
+            dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 player.hit(self.damage)
-                self.last_attack = time.time()
+                self.last_attack = time.perf_counter()
 
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
@@ -161,7 +161,7 @@ class Slime:
             self.is_dead = True
 
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Mana
     def mana_reward(self, mana_crystals):
@@ -213,11 +213,11 @@ class DarkMage:
         self.attack_list = []
 
         # Time
-        self.last_attack = time.time()
+        self.last_attack = time.perf_counter()
         self.attack_cooldown = 1_200  # milliseconds
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
@@ -272,14 +272,14 @@ class DarkMage:
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
     # Functions --------------------------------------------------- #
     # Attacks
     def append_attack(self, player):
-        dt = time.time() - self.last_attack
+        dt = time.perf_counter() - self.last_attack
         if dt * 1000 >= self.attack_cooldown:  # cooldown
             target = (
                 player.rect.centerx * window.enlarge,
@@ -288,7 +288,7 @@ class DarkMage:
             attack = DarkFireBall(self.rect.center, target)
             
             self.attack_list.append(attack)
-            self.last_attack = time.time()
+            self.last_attack = time.perf_counter()
 
     def update_attack(self, player):
         remove_attack = []
@@ -310,7 +310,7 @@ class DarkMage:
             self.is_dead = True
         
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Mana
     def mana_reward(self, mana_crystals):
@@ -369,11 +369,11 @@ class Mushroom:
         self.range_visibility = False
 
         # Time
-        self.last_attack = time.time()
+        self.last_attack = time.perf_counter()
         self.attack_cooldown = 1_000  # milliseconds
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
@@ -421,17 +421,17 @@ class Mushroom:
     def attack(self, player):
         if self.attack_range.colliderect(player.rect):
             self.range_visibility = True
-            dt = time.time() - self.last_attack
+            dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 player.hit(self.damage)
-                self.last_attack = time.time()
+                self.last_attack = time.perf_counter()
         else:
             self.range_visibility = False
 
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
@@ -443,7 +443,7 @@ class Mushroom:
             self.is_dead = True
 
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Mana
     def mana_reward(self, mana_crystals):
@@ -514,11 +514,11 @@ class Fireshroom:
         self.attack_list = []
 
         # Time
-        self.last_attack = time.time()
+        self.last_attack = time.perf_counter()
         self.attack_cooldown = 1_200  # milliseconds
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
@@ -585,20 +585,20 @@ class Fireshroom:
     # Hit
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
     # Functions --------------------------------------------------- #
     # Attacks
     def append_attack(self):
-        dt = time.time() - self.last_attack
+        dt = time.perf_counter() - self.last_attack
         if dt * 1000 >= self.attack_cooldown:  # cooldown
             for target in self.targets:
                 attack = DarkFireBall(self.rect.center, target)
             
                 self.attack_list.append(attack)
-                self.last_attack = time.time()
+                self.last_attack = time.perf_counter()
 
     def update_attack(self, player):
         remove_attack = []
@@ -620,7 +620,7 @@ class Fireshroom:
             self.is_dead = True
 
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Mana
     def mana_reward(self, mana_crystals):
@@ -668,7 +668,7 @@ class Boomshroom:
         self.direction = None
 
     def init_hit(self):
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
 
     def init_status(self):
@@ -709,7 +709,7 @@ class Boomshroom:
     # Hit 
     def hit_timer(self):
         if self.image_used == "hit":
-            dt = time.time() - self.last_hit
+            dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
 
@@ -721,7 +721,7 @@ class Boomshroom:
             self.is_dead = True
 
         self.image_used = "hit"
-        self.last_hit = time.time()
+        self.last_hit = time.perf_counter()
 
     # Mana
     def mana_reward(self, mana_crystals):
