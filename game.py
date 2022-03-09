@@ -14,9 +14,11 @@ win_size = (
 win = pygame.display.set_mode(win_size)
 
 # Json
-json_file = open(f"{path}/data/game.json")
-game_data = json.load(json_file)
-json_file.close()
+# json_file = open(f"{path}/data/game.json")
+# game_data = json.load(json_file)
+# json_file.close()
+with open(f"{path}/data/game.json") as json_file:
+    game_data = json.load(json_file)
 
 
 class Game:
