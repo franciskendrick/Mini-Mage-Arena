@@ -243,8 +243,10 @@ class ManaCrystal:
             newmana_in_magnetrange = self.magent_range.colliderect(mana.rect)
             # Current Mana and New Mana are Same Types 
             same_types = self.type == mana.type
+            # Current Not at Maximum
+            not_at_max = self.type < 2
             # Current Not at Maximum AND "Current Points + Fusing Points" is in the Next Level of Crystals
-            newpoint_in_nextlevel = self.type < 2 and self.points + mana.points <= self.points_map[self.type+1]
+            newpoint_in_nextlevel = not_at_max and self.points + mana.points <= self.points_map[self.type+1]
             
             # if All that has been Said is True
             if newmana_in_magnetrange and same_types and newpoint_in_nextlevel:
