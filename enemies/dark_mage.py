@@ -7,7 +7,7 @@ import time
 import os
 
 pygame.init()
-path = os.path.dirname(os.path.realpath("__main__"))
+path = os.path.dirname(os.path.realpath(__file__))
 
 
 class DarkMage:
@@ -23,7 +23,7 @@ class DarkMage:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            f"{path}/assets/sprites/dark_mage.png")
+            f"{path}/assets/dark_mage.png")
         self.idx = 0
 
         # Palettes

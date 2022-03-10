@@ -4,7 +4,7 @@ import pygame
 import time
 import os
 
-path = os.path.dirname(os.path.realpath("__main__"))
+path = os.path.dirname(os.path.realpath(__file__))
 
 
 class Boomshroom:
@@ -19,7 +19,7 @@ class Boomshroom:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            f"{path}/assets/sprites/boomshroom.png")
+            f"{path}/assets/boomshroom.png")
         self.idx = 0
 
         # Palettes

@@ -5,7 +5,7 @@ import time
 import os
 
 pygame.init()
-path = os.path.dirname(os.path.realpath("__main__"))
+path = os.path.dirname(os.path.realpath(__file__))
 
 
 class Slime:
@@ -22,7 +22,7 @@ class Slime:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            f"{path}/assets/sprites/slime.png")
+            f"{path}/assets/slime.png")
         self.idx = 0
 
         # Palettes

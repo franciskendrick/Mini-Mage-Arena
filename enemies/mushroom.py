@@ -5,7 +5,7 @@ import pygame
 import time
 import os
 
-path = os.path.dirname(os.path.realpath("__main__"))
+path = os.path.dirname(os.path.realpath(__file__))
 
 
 class Mushroom:
@@ -21,7 +21,7 @@ class Mushroom:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            f"{path}/assets/sprites/mushroom.png")
+            f"{path}/assets/mushroom.png")
         self.idx = 0
 
         # Palettes
