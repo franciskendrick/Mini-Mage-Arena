@@ -1,10 +1,12 @@
-from functions import *
+from functions import Circle, circle_edge_collision
+from windows import window
 import pygame
+import math
 
 pygame.init()
 
 
-class DarkFireBall:
+class Fireball:
     # Initialize -------------------------------------------------- #
     def __init__(self, origin, target):
         self.circle = Circle(origin, 4)
@@ -14,7 +16,7 @@ class DarkFireBall:
         self.collided = False
 
     def init_color(self):
-        self.color = (168, 202, 88)
+        self.color = (222, 158, 65)
 
     def init_movement(self, target):
         target_x, target_y = target

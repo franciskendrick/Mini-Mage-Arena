@@ -1,6 +1,6 @@
 from functions import Circle, clip_set_to_list_on_xaxis, palette_swap
 from supports import ManaCrystal
-from enemy_spells import DarkFireBall
+from spells.enemy import Fireball
 from windows import window
 import pygame
 import time
@@ -153,7 +153,7 @@ class Fireshroom:
         dt = time.perf_counter() - self.last_attack
         if dt * 1000 >= self.attack_cooldown:  # cooldown
             for target in self.targets:
-                attack = DarkFireBall(self.rect.center, target)
+                attack = Fireball(self.rect.center, target)
             
                 self.attack_list.append(attack)
                 self.last_attack = time.perf_counter()
