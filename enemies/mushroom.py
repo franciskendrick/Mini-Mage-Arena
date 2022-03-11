@@ -1,5 +1,4 @@
-from functions import clip_set_to_list_on_xaxis, palette_swap
-from functions import Circle
+from functions import Circle, clip_set_to_list_on_xaxis, palette_swap
 from supports import ManaCrystal
 import pygame
 import time

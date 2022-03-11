@@ -1,6 +1,5 @@
-from functions import circle_edge_collision
+from functions import Circle, circle_edge_collision
 from windows import window
-from functions import Circle
 import pygame
 import math
 
