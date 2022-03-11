@@ -1,6 +1,6 @@
-from functions import *
-from windows import window
+from functions import clip_set_to_list_on_xaxis, palette_swap, rect_edge_collision
 from spells.player import FireBall
+from windows import window
 import pygame
 import time
 import os
@@ -8,7 +8,7 @@ import os
 pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
 
-    
+
 class Player:
     # Initialize -------------------------------------------------- #
     def __init__(self):
@@ -23,7 +23,7 @@ class Player:
     def init_images(self):
         # Spriteset
         spriteset = pygame.image.load(
-            f"{path}/assets/sprites/player_mage.png")
+            f"{path}/assets/player.png")
         self.idx = 0
 
         # Palettes
