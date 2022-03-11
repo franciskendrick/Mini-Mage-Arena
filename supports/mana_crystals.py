@@ -1,6 +1,5 @@
-from functions import clip_set_to_dict_on_xaxis, separate_sets_from_yaxis, rect_edge_collision
+from functions import Circle, clip_set_to_dict_on_xaxis, separate_sets_from_yaxis, rect_edge_collision
 from windows import window
-from functions import Circle
 import pygame
 import random
 import math
