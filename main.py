@@ -1,6 +1,5 @@
 from windows import window
-from game import game
-from windows.game import PlayerGauge
+from windows.game import PlayerGauge, status_bar
 from player import Player
 from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom
 from supports import HealingPotion, ManaCrystal
@@ -13,7 +12,7 @@ def redraw_game():
     display.fill((100, 100, 120))
 
     # Window
-    game.draw_statbar_bg(display)
+    status_bar.draw(display)
     player_gauge.draw(display)
 
     # Player
