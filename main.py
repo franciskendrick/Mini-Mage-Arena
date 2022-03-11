@@ -1,5 +1,6 @@
 from windows import window
-from game import PlayerGauge, game
+from game import game
+from windows.game import PlayerGauge
 from player import Player
 from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom
 from supports import HealingPotion, ManaCrystal
