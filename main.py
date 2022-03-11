@@ -108,8 +108,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [Slime()]
-    enemies = []
+    enemies = [Fireshroom()]
+    # enemies = []
 
     # Supports
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]

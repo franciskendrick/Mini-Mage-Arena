@@ -1,6 +1,6 @@
 from functions import clip_set_to_list_on_xaxis, palette_swap
 from supports import ManaCrystal
-from enemy_spells import DarkFireBall
+from spells.enemy import DarkFireBall
 from windows import window
 import pygame
 import time
