@@ -1,4 +1,4 @@
-from .clip import clip
+from .clip_image import clip
 
 
 def clip_set_to_list_on_xaxis(set):

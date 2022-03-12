@@ -1,4 +1,4 @@
-from .clip import clip
+from .clip_image import clip
 
 
 def separate_sets_from_xaxis(set_img, separator_color):
