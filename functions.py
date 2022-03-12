@@ -6,25 +6,6 @@ pygame.init()
 path = os.path.dirname(os.path.realpath("main.py"))
 
 
-# Clip ImageSet to Dictionary
-def clip_set_to_dict_on_xaxis(sets, order):
-    dict_images = {}
-    for name, set in zip(order, sets):
-        image = clip_set_to_list_on_xaxis(set)
-        dict_images[name] = image
-    
-    return dict_images
-
-
-def clip_set_to_dict_on_yaxis(sets, order):
-    dict_images = {}
-    for name, set in zip(order, sets):
-        image = clip_set_to_list_on_yaxis(set)
-        dict_images[name] = image
-    
-    return dict_images
-
-
 # Separate ImageSets
 def separate_sets_from_xaxis(set_img, separator_color):
     separated_sets = []
