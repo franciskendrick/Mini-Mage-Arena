@@ -1,19 +1,9 @@
 from windows import window
 import pygame
-import math
 import os
 
 pygame.init()
 path = os.path.dirname(os.path.realpath("main.py"))
-
-
-# Clip Image
-def clip(set, pos, size):
-    clip_rect = pygame.Rect(pos, size)
-    set.set_clip(clip_rect)
-    img = set.subsurface(set.get_clip())
-
-    return img
 
 
 # Clip ImageSet to List
