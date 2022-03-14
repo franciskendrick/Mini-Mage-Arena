@@ -15,9 +15,6 @@ def redraw_game():
     status_bar.draw(display)
     player_gauge.draw(display)
 
-    # Player
-    player.draw(display)
-
     # Enemies
     for enemy in enemies:
         enemy.draw(display)
@@ -27,6 +24,9 @@ def redraw_game():
         mana.draw(display)
     for potion in healing_potions:
         potion.draw(display)
+
+    # Player
+    player.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)

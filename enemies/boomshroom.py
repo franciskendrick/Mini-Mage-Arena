@@ -1,5 +1,6 @@
 from functions import Circle, clip_set_to_list_on_xaxis, palette_swap
 from supports import ManaCrystal
+from windows import window
 import pygame
 import time
 import os
@@ -16,6 +17,8 @@ class Boomshroom:
         self.init_attack()
         self.init_hit()
         self.init_status()
+        self.alpha_surface = pygame.Surface(
+            window.rect.size, pygame.SRCALPHA)
 
     def init_images(self):
         # Spriteset
@@ -74,6 +77,8 @@ class Boomshroom:
         # Range
         self.inner_attack_range = Circle(
             self.rect.center, 80)
+        self.middle_attack_range = Circle(
+            self.rect.center, 160)
         self.outer_attack_range = Circle(
             self.rect.center, 320)
         
@@ -98,6 +103,8 @@ class Boomshroom:
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         if not self.exploded:
+            if self.image_used == "blink":
+                self.draw_blink(display)
             self.draw_sprite(display)
         else:
             self.draw_explosion(display)
@@ -116,20 +123,32 @@ class Boomshroom:
         # Draw
         display.blit(img, self.rect)
 
-        # !!!
+        # Update
+        self.idx += 1
+
+    def draw_blink(self, display):
+        # Outer Circle
+        center = self.outer_attack_range.center
+        radius = self.outer_attack_range.radius
+        border_width = radius - self.middle_attack_range.radius
+        pygame.draw.circle(
+            self.alpha_surface, (255, 255, 0, 80), center, radius, border_width)
+
+        # Middle Circle
+        center = self.middle_attack_range.center
+        radius = self.middle_attack_range.radius
+        border_width = radius - self.inner_attack_range.radius
+        pygame.draw.circle(
+            self.alpha_surface, (255, 165, 0, 80), center, radius, border_width)
+
+        # Inner Circle
         center = self.inner_attack_range.center
         radius = self.inner_attack_range.radius
         pygame.draw.circle(
-            display, (255, 0, 0), center, radius, 1)
+            self.alpha_surface, (255, 0, 0, 80), center, radius)
 
-        # !!!
-        center = self.outer_attack_range.center
-        radius = self.outer_attack_range.radius
-        pygame.draw.circle(
-            display, (255, 255, 0), center, radius, 1)
-
-        # Update
-        self.idx += 1
+        # Blit on Display 
+        display.blit(self.alpha_surface, (0, 0))
 
     def draw_explosion(self, display):
         # Image & Rectangle
@@ -197,8 +216,10 @@ class Boomshroom:
         # Hit Player
         if self.inner_attack_range.colliderect(player.rect):
             player.hit(10)
-        elif self.outer_attack_range.colliderect(player.rect):
+        elif self.middle_attack_range.colliderect(player.rect):
             player.hit(5)
+        elif self.outer_attack_range.colliderect(player.rect):
+            player.hit(3)
 
         # Change Exploded Status
         self.exploded = True
