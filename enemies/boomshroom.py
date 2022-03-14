@@ -49,9 +49,23 @@ class Boomshroom:
         }
         self.image_used = "default"
 
+        # Explosion
+        explosion_set = pygame.image.load(
+            f"{path}/assets/boomshroom_explosion.png")
+        self.explosion_images = clip_set_to_list_on_xaxis(explosion_set)
+        self.explosion_idx = 0
+
     def init_rect(self):
+        # Sprite
         size = self.images[self.image_used][self.idx].get_rect().size
         self.rect = pygame.Rect(100, 100, *size)
+
+        # Explosion
+        explosion_offset = [-9, -19]
+        self.resized_explosion_offset = [-10, -19]
+        size = self.explosion_images[self.explosion_idx].get_rect().size
+        self.explosion_rect = pygame.Rect(
+            100 + explosion_offset[0], 100 + explosion_offset[1], *size)
 
     def init_direction(self):
         self.direction = None
@@ -83,6 +97,12 @@ class Boomshroom:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
+        if not self.exploded:
+            self.draw_sprite(display)
+        else:
+            self.draw_explosion(display)
+
+    def draw_sprite(self, display):
         # Reset
         imgs = self.images[self.image_used]
         if self.idx >= len(imgs) * 5:
@@ -111,11 +131,32 @@ class Boomshroom:
         # Update
         self.idx += 1
 
+    def draw_explosion(self, display):
+        # Image & Rectangle
+        img = self.explosion_images[self.explosion_idx // 5]
+        rect = self.explosion_rect.copy()
+        if self.explosion_idx // 5 >= 4:
+            # Image
+            wd, ht = self.explosion_rect.size
+            img = pygame.transform.scale(
+                img, (wd * 3, ht * 3))
+
+            # Rectangle
+            rect.x += self.resized_explosion_offset[0] * 3
+            rect.y += self.resized_explosion_offset[1] * 3
+
+        # Draw
+        display.blit(img, rect)
+
+        # Update
+        self.explosion_idx += 1
+
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
         self.attack(player)
         self.hit_timer()
+        self.kill_in_explosion()
 
     # Direction
     def facing(self, player):
@@ -149,23 +190,17 @@ class Boomshroom:
                 self.image_used = "blink" if self.image_used != "blink" else "default"
                 self.blink_count += 1
                 self.last_blink = time.perf_counter()
-        elif self.blink_count / 2 >= 3:
+        elif not self.exploded and self.blink_count / 2 >= 3:
             self.explode(player)
 
     def explode(self, player):
-        # Get Damage
-        if self.inner_attack_range.colliderect(player.rect):
-            damage = 20
-        elif self.outer_attack_range.colliderect(player.rect):
-            damage = 10
-        else:
-            damage = 5
-
         # Hit Player
-        player.hit(damage)
+        if self.inner_attack_range.colliderect(player.rect):
+            player.hit(10)
+        elif self.outer_attack_range.colliderect(player.rect):
+            player.hit(5)
 
-        # Change Boomshroom Status
-        self.is_dead = True
+        # Change Exploded Status
         self.exploded = True
 
     # Hit
@@ -182,3 +217,8 @@ class Boomshroom:
         if not self.exploded:
             for _ in range(round(self.max_health * 1.5)):
                 mana_crystals.append(ManaCrystal(self.rect.center))
+
+    # Kill
+    def kill_in_explosion(self):
+        if self.explosion_idx >= len(self.explosion_images) * 5:
+            self.is_dead = True
