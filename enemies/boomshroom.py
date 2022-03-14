@@ -58,19 +58,18 @@ class Boomshroom:
 
     def init_attack(self):
         # Range
-        self.attack_range = Circle(
+        self.inner_attack_range = Circle(
             self.rect.center, 80)
+        self.outer_attack_range = Circle(
+            self.rect.center, 320)
         
         # Trigger
         self.triggered = False
 
         # Blink
         self.last_blink = time.perf_counter()
-        self.time_fuze = 500  # milliseconds
+        self.time_fuze = 750  # milliseconds
         self.blink_count = 0
-
-        # Explode
-        self.explode = False
 
     def init_hit(self):
         self.last_hit = time.perf_counter()
@@ -80,6 +79,7 @@ class Boomshroom:
         self.max_health = 12
         self.health = 12
         self.is_dead = False
+        self.exploded = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -97,10 +97,16 @@ class Boomshroom:
         display.blit(img, self.rect)
 
         # !!!
-        center = self.attack_range.center
-        radius = self.attack_range.radius
+        center = self.inner_attack_range.center
+        radius = self.inner_attack_range.radius
         pygame.draw.circle(
             display, (255, 0, 0), center, radius, 1)
+
+        # !!!
+        center = self.outer_attack_range.center
+        radius = self.outer_attack_range.radius
+        pygame.draw.circle(
+            display, (255, 255, 0), center, radius, 1)
 
         # Update
         self.idx += 1
@@ -121,7 +127,7 @@ class Boomshroom:
     # Attack
     def attack(self, player):
         self.trigger_detection(player)
-        self.update_fuze()
+        self.update_fuze(player)
 
     # Hit 
     def hit_timer(self):
@@ -133,10 +139,10 @@ class Boomshroom:
     # Functions --------------------------------------------------- #
     # Attack
     def trigger_detection(self, player):
-        if self.attack_range.colliderect(player.rect):
+        if self.inner_attack_range.colliderect(player.rect):
             self.triggered = True
 
-    def update_fuze(self):
+    def update_fuze(self, player):
         if self.triggered and self.blink_count / 2 < 3:
             dt = time.perf_counter() - self.last_blink
             if dt * 1000 >= self.time_fuze:
@@ -144,7 +150,23 @@ class Boomshroom:
                 self.blink_count += 1
                 self.last_blink = time.perf_counter()
         elif self.blink_count / 2 >= 3:
-            self.explode = True
+            self.explode(player)
+
+    def explode(self, player):
+        # Get Damage
+        if self.inner_attack_range.colliderect(player.rect):
+            damage = 20
+        elif self.outer_attack_range.colliderect(player.rect):
+            damage = 10
+        else:
+            damage = 5
+
+        # Hit Player
+        player.hit(damage)
+
+        # Change Boomshroom Status
+        self.is_dead = True
+        self.exploded = True
 
     # Hit
     def hit(self, damage):
@@ -157,5 +179,6 @@ class Boomshroom:
 
     # Mana
     def mana_reward(self, mana_crystals):
-        for _ in range(round(self.max_health * 1.5)):
-            mana_crystals.append(ManaCrystal(self.rect.center))
+        if not self.exploded:
+            for _ in range(round(self.max_health * 1.5)):
+                mana_crystals.append(ManaCrystal(self.rect.center))
