@@ -124,7 +124,7 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [DarkMage()]
+    enemies = [Boomshroom()]
     # enemies = []
     update_enemies = []
 

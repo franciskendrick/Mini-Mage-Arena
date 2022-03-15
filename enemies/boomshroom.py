@@ -104,9 +104,9 @@ class Boomshroom:
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         if not self.exploded:
-            if self.image_used == "blink":
-                self.draw_blink(display)
             if not self.is_dead:
+                if self.image_used == "blink":
+                    self.draw_blink(display)
                 self.draw_sprite(display)
         else:
             self.draw_explosion(display)
@@ -181,7 +181,7 @@ class Boomshroom:
         self.hit_timer()
         self.delete_itself()
 
-    def dead_update(self, player):
+    def dead_update(self, _):
         self.delete_itself()
 
     # Direction

@@ -67,6 +67,7 @@ class Slime:
         self.max_health = 12
         self.health = 12
         self.is_dead = False
+        self.delete = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -157,6 +158,7 @@ class Slime:
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
+            self.delete = True
 
         self.image_used = "hit"
         self.last_hit = time.perf_counter()
