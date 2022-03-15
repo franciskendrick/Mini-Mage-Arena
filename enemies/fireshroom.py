@@ -83,10 +83,12 @@ class Fireshroom:
         self.max_health = 12
         self.health = 12
         self.is_dead = False
+        self.delete = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        self.draw_sprite(display)
+        if not self.is_dead:
+            self.draw_sprite(display)
         self.draw_attacks(display)
 
     def draw_sprite(self, display):
@@ -119,10 +121,16 @@ class Fireshroom:
             attack.draw(display)
 
     # Update ------------------------------------------------------ #
+    # Updates
     def update(self, player):
         self.facing(player)
         self.attack(player)
         self.hit_timer()
+        self.delete_itself()
+
+    def dead_update(self, player):
+        self.update_attack(player)
+        self.delete_itself()
 
     # Direction
     def facing(self, player):
@@ -184,3 +192,8 @@ class Fireshroom:
     def mana_reward(self, mana_crystals):
         for _ in range(round(self.max_health * 1.5)):
             mana_crystals.append(ManaCrystal(self.rect.center))
+
+    # Kill
+    def delete_itself(self):
+        if self.is_dead and len(self.attack_list) == 0:
+            self.delete = True
