@@ -89,6 +89,7 @@ class Boomshroom:
         self.last_blink = time.perf_counter()
         self.time_fuze = 750  # milliseconds
         self.blink_count = 0
+        self.blink = False
 
     def init_hit(self):
         self.last_hit = time.perf_counter()
@@ -106,7 +107,7 @@ class Boomshroom:
     def draw(self, display):
         if not self.exploded:
             if not self.is_dead:
-                if self.image_used == "blink":
+                if self.blink:
                     self.draw_blink(display)
                 self.draw_sprite(display)
         else:
@@ -202,7 +203,7 @@ class Boomshroom:
         if self.is_hit:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
-                self.image_used = "default"
+                self.image_used = "default" if not self.blink else "blink"
                 self.is_hit = False
 
     # Functions --------------------------------------------------- #
@@ -215,7 +216,14 @@ class Boomshroom:
         if self.triggered and self.blink_count / 2 < 3:
             dt = time.perf_counter() - self.last_blink
             if dt * 1000 >= self.time_fuze:
-                self.image_used = "blink" if self.image_used != "blink" else "default"
+                self.blink = not self.blink
+                if self.is_hit:
+                    self.image_used = "hit"
+                elif self.blink:
+                    self.image_used = "blink"
+                else:
+                    self.image_used = "default"
+
                 self.blink_count += 1
                 self.last_blink = time.perf_counter()
         elif not self.exploded and self.blink_count / 2 >= 3:
