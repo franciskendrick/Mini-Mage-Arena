@@ -99,6 +99,7 @@ class Boomshroom:
         self.health = 12
         self.is_dead = False
         self.exploded = False
+        self.delete = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -168,14 +169,19 @@ class Boomshroom:
         display.blit(img, rect)
 
         # Update
-        self.explosion_idx += 1
+        if self.explosion_idx < (len(self.explosion_images) - 1) * 5:
+            self.explosion_idx += 1
 
     # Update ------------------------------------------------------ #
+    # Updates
     def update(self, player):
         self.facing(player)
         self.attack(player)
         self.hit_timer()
-        self.kill_in_explosion()
+        self.delete_itself()
+
+    def dead_update(self, player):
+        self.delete_itself()
 
     # Direction
     def facing(self, player):
@@ -221,8 +227,9 @@ class Boomshroom:
         elif self.outer_attack_range.colliderect(player.rect):
             player.hit(3)
 
-        # Change Exploded Status
+        # Change Status
         self.exploded = True
+        self.is_dead = True
 
     # Hit
     def hit(self, damage):
@@ -240,6 +247,7 @@ class Boomshroom:
                 mana_crystals.append(ManaCrystal(self.rect.center))
 
     # Kill
-    def kill_in_explosion(self):
-        if self.explosion_idx >= len(self.explosion_images) * 5:
-            self.is_dead = True
+    def delete_itself(self):
+        in_last_frame = self.explosion_idx // 5 == len(self.explosion_images) * 5
+        if self.is_dead and self.exploded and in_last_frame:
+            self.delete = True
