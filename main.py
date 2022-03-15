@@ -16,7 +16,8 @@ def redraw_game():
     player_gauge.draw(display)
 
     # Enemies
-    for enemy in enemies:
+    enemies_list = enemies + update_enemies
+    for enemy in enemies_list:
         enemy.draw(display)
 
     # Supports
@@ -51,13 +52,28 @@ def game_loop():
         for enemy in enemies:
             enemy.update(player)
 
-            if enemy.is_dead:
+            if enemy.delete:
                 enemy.mana_reward(mana_crystals)
                 remove_enemies.append(enemy)
+            elif enemy.is_dead:
+                enemy.mana_reward(mana_crystals)
+                remove_enemies.append(enemy)
+                update_enemies.append(enemy)
 
         for enemy in remove_enemies:
             enemies.remove(enemy)
-        
+
+        # Update Enemies
+        remove_enemies = []
+        for enemy in update_enemies:
+            enemy.dead_update(player)
+
+            if enemy.delete:
+                remove_enemies.append(enemy)
+
+        for enemy in remove_enemies:
+            update_enemies.remove(enemy)
+
         # Mana Crystals
         remove_mana = []
         for mana in mana_crystals:
@@ -108,8 +124,9 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [Boomshroom()]
+    enemies = [DarkMage()]
     # enemies = []
+    update_enemies = []
 
     # Supports
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
