@@ -78,6 +78,7 @@ class Fireshroom:
     def init_hit(self):
         self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
+        self.is_hit = False
 
     def init_status(self):
         self.max_health = 12
@@ -88,6 +89,7 @@ class Fireshroom:
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         if not self.is_dead:
+            self.draw_range(display)
             self.draw_sprite(display)
         self.draw_attacks(display)
 
@@ -108,15 +110,14 @@ class Fireshroom:
         # Update
         self.idx += 1
 
-    def draw_attacks(self, display):
-        # Range
+    def draw_range(self, display):
         if self.range_visibility:
             center = self.attack_range.center
             radius = self.attack_range.radius
             pygame.draw.circle(
                 display, (165, 48, 48), center, radius, 1)
 
-        # Attacks
+    def draw_attacks(self, display):
         for attack in self.attack_list:
             attack.draw(display)
 
@@ -150,10 +151,11 @@ class Fireshroom:
 
     # Hit
     def hit_timer(self):
-        if self.image_used == "hit":
+        if self.is_hit:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
+                self.is_hit = False
 
     # Functions --------------------------------------------------- #
     # Attacks
@@ -181,6 +183,7 @@ class Fireshroom:
 
     # Hit
     def hit(self, damage):
+        self.is_hit = True
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True

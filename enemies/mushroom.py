@@ -64,6 +64,7 @@ class Mushroom:
     def init_hit(self):
         self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
+        self.is_hit = False
 
     def init_status(self):
         self.max_health = 12
@@ -120,14 +121,16 @@ class Mushroom:
 
     # Hit
     def hit_timer(self):
-        if self.image_used == "hit":
+        if self.is_hit:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
+                self.is_hit = False
 
     # Functions --------------------------------------------------- #
     # Hit
     def hit(self, damage):
+        self.is_hit = True
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
