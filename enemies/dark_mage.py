@@ -159,6 +159,7 @@ class DarkMage:
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
+            self.delete = True
         
         self.image_used = "hit"
         self.last_hit = time.perf_counter()

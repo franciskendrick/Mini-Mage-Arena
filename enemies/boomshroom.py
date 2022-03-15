@@ -106,7 +106,8 @@ class Boomshroom:
         if not self.exploded:
             if self.image_used == "blink":
                 self.draw_blink(display)
-            self.draw_sprite(display)
+            if not self.is_dead:
+                self.draw_sprite(display)
         else:
             self.draw_explosion(display)
 
@@ -236,6 +237,7 @@ class Boomshroom:
         self.health -= damage
         if self.health <= 0:
             self.is_dead = True
+            self.delete = True
 
         self.image_used = "hit"
         self.last_hit = time.perf_counter()
