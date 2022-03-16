@@ -1,4 +1,4 @@
-from functions import clip_set_to_list_on_xaxis, palette_swap
+from functions import clip_set_to_list_on_xaxis
 from functions import separate_sets_from_xaxis, separate_sets_from_yaxis
 import pygame
 import os
@@ -57,7 +57,10 @@ class NormalKnight:
 
     def init_rect(self):
         image = self.images[self.image_used][self.doing]
-        sword_offset = [12, 2]
+        self.sword_offset = {
+            "left": [-9, 2],
+            "right": [12, 2]
+        }
 
         # Sprite
         size = image[0][self.idx].get_rect().size
@@ -66,7 +69,9 @@ class NormalKnight:
         # Sword
         size = image[1][self.idx].get_rect().size
         self.sword_rect = pygame.Rect(
-            100 + sword_offset[0], 100 + sword_offset[1], *size)
+            100 + self.sword_offset["right"][0], 
+            100 + self.sword_offset["right"][1], 
+            *size)
 
     def init_status(self):
         self.is_dead = False
@@ -87,17 +92,48 @@ class NormalKnight:
         self.idx += 1
 
     def draw_sword(self, display):
+        # Images
         imgs = self.images[self.image_used][self.doing][0]
+
+        # Direction
         img = imgs[self.idx // 5]
+        if self.direction == "left":
+            img = pygame.transform.flip(img, True, False)
+
+        # Draw
         display.blit(img, self.sprite_rect)
 
     def draw_sprite(self, display):
+        # Images
         imgs = self.images[self.image_used][self.doing][1]
+
+        # Direction
         img = imgs[self.idx // 5]
+        if self.direction == "left":
+            img = pygame.transform.flip(img, True, False)
+
+        # Draw
         display.blit(img, self.sword_rect)
 
     # Update ------------------------------------------------------ #
     def update(self, player):
-        pass
+        self.facing(player)
+
+    # Direction
+    def facing(self, player):
+        # Update Direction
+        if self.sprite_rect.centerx - player.rect.centerx > 0:  # left
+            self.direction = "left"
+        else:  # right
+            self.direction = "right"
+        
+        # Update Sword Rectangle
+        self.update_swordrect()
 
     # Functions --------------------------------------------------- #
+    # Direction
+    def update_swordrect(self):
+        self.sword_rect = pygame.Rect(
+            self.sprite_rect.x + self.sword_offset[self.direction][0], 
+            self.sprite_rect.y + self.sword_offset[self.direction][1], 
+            *self.sword_rect.size)
