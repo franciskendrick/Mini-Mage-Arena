@@ -108,6 +108,8 @@ def game_loop():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    
     # Window
     win_size = (
         window.rect.width * window.enlarge,

@@ -1,5 +1,7 @@
 import pygame
 
+pygame.init()
+
 
 def clip(set, pos, size):
     clip_rect = pygame.Rect(pos, size)

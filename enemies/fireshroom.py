@@ -6,6 +6,7 @@ import pygame
 import time
 import os
 
+pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
 
 
