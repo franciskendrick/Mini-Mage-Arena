@@ -1,4 +1,4 @@
-from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom
+from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom, NormalKnight
 from supports import HealingPotion, ManaCrystal
 from player import Player
 from windows.game import PlayerGauge, status_bar
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [Boomshroom()]
+    enemies = [NormalKnight()]
     # enemies = []
     update_enemies = []
 
