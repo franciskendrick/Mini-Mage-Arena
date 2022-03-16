@@ -11,10 +11,6 @@ import sys
 def redraw_game():
     display.fill((100, 100, 120))
 
-    # Window
-    status_bar.draw(display)
-    player_gauge.draw(display)
-
     # Enemies
     enemies_list = enemies + update_enemies
     for enemy in enemies_list:
@@ -28,6 +24,10 @@ def redraw_game():
 
     # Player
     player.draw(display)
+
+    # Status Bar
+    status_bar.draw(display)
+    player_gauge.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
