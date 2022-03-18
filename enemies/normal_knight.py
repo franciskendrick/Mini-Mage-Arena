@@ -1,4 +1,4 @@
-from functions import clip_set_to_list_on_xaxis, palette_swap
+from functions import clip_set_to_list_on_xaxis, palette_swap, rect_edge_collision
 from functions import separate_sets_from_xaxis, separate_sets_from_yaxis
 from supports import ManaCrystal
 import pygame
@@ -14,6 +14,8 @@ class NormalKnight:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.init_direction()
+        self.init_movement()
         self.init_hit()
         self.init_status()
 
@@ -93,6 +95,12 @@ class NormalKnight:
             100 + self.sword_offset["right"][1], 
             *size)
 
+    def init_direction(self):
+        self.direction = None
+
+    def init_movement(self):
+        self.vel = 2
+
     def init_hit(self):
         self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
@@ -112,8 +120,8 @@ class NormalKnight:
             self.idx = 0
 
         # Draw
-        self.draw_sword(display)
         self.draw_sprite(display)
+        self.draw_sword(display)
 
         # Update
         self.idx += 1
@@ -145,6 +153,7 @@ class NormalKnight:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.movement(player)
         self.hit_timer()
 
     # Direction
@@ -157,6 +166,13 @@ class NormalKnight:
         
         # Update Sword Rectangle
         self.update_swordrect()
+
+    # Movement
+    def movement(self, player):
+        self.move_left(player)
+        self.move_right(player)
+        self.move_up(player)
+        self.move_down(player)
 
     # Hit
     def hit_timer(self):
@@ -174,6 +190,79 @@ class NormalKnight:
             self.rect.x + offset[0], 
             self.rect.y + offset[1],
             *self.sword_rect.size)
+
+    # Movement
+    def move_left(self, player):
+        # Handle Rectangles
+        handle_sprite_rect = self.rect.copy()
+        handle_sword_rect = self.sword_rect.copy()
+
+        # Player in -x Axis
+        if player.rect.centerx < self.rect.centerx - self.vel:
+            # Move Enemy
+            handle_sprite_rect.centerx -= self.vel 
+            handle_sword_rect.centerx -= self.vel 
+
+            # Not Colliding with a Wall 
+            not_sprite_collision = not rect_edge_collision(handle_sprite_rect)
+            not_sword_collision = not rect_edge_collision(handle_sword_rect)
+            if not_sprite_collision and not_sword_collision:
+                self.rect.centerx -= self.vel
+                self.sword_rect.centerx -= self.vel
+
+    def move_right(self, player):
+        # Handle Rectangles
+        handle_sprite_rect = self.rect.copy()
+        handle_sword_rect = self.sword_rect.copy()
+
+        # Player in +x Axis
+        if player.rect.centerx > self.rect.centerx + self.vel:
+            # Move Enemy
+            handle_sprite_rect.centerx += self.vel
+            handle_sword_rect.centerx += self.vel
+
+            # Not Colliding with a Wall 
+            not_sprite_collision = not rect_edge_collision(handle_sprite_rect)
+            not_sword_collision = not rect_edge_collision(handle_sword_rect)
+            if not_sprite_collision and not_sword_collision:
+                self.rect.centerx += self.vel
+                self.sword_rect.centerx += self.vel
+
+    def move_up(self, player):
+        # Handle Rectangles
+        handle_sprite_rect = self.rect.copy()
+        handle_sword_rect = self.sword_rect.copy()
+
+        # Player in -y Axis
+        if player.rect.centery < self.rect.centery - self.vel:
+            # Move Enemy
+            handle_sprite_rect.centery -= self.vel
+            handle_sword_rect.centery -= self.vel
+
+            # Not Colliding with a Wall 
+            not_sprite_collision = not rect_edge_collision(handle_sprite_rect)
+            not_sword_collision = not rect_edge_collision(handle_sword_rect)
+            if not_sprite_collision and not_sword_collision:
+                self.rect.centery -= self.vel
+                self.sword_rect.centery -= self.vel
+
+    def move_down(self, player):
+        # Handle Rectangles
+        handle_sprite_rect = self.rect.copy()
+        handle_sword_rect = self.sword_rect.copy()
+
+        # Player in +y Axis
+        if player.rect.centery > self.rect.centery - self.vel:
+            # Move Enemy
+            handle_sprite_rect.centery += self.vel
+            handle_sword_rect.centery += self.vel
+
+            # Not Colliding with a Wall 
+            not_sprite_collision = not rect_edge_collision(handle_sprite_rect)
+            not_sword_collision = not rect_edge_collision(handle_sword_rect)
+            if not_sprite_collision and not_sword_collision:
+                self.rect.centery += self.vel
+                self.sword_rect.centery += self.vel
 
     # Hit
     def hit(self, damage):
