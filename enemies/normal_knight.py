@@ -1,6 +1,7 @@
-from functions import clip_set_to_list_on_xaxis
+from functions import clip_set_to_list_on_xaxis, palette_swap
 from functions import separate_sets_from_xaxis, separate_sets_from_yaxis
 import pygame
+import time
 import os
 
 pygame.init()
@@ -12,6 +13,7 @@ class NormalKnight:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.init_hit()
         self.init_status()
 
     def init_images(self):
@@ -43,44 +45,68 @@ class NormalKnight:
             attacking_spriteset, (0, 255, 0))
 
         self.images = {
-            "default": {
-                "walking": [
-                    clip_set_to_list_on_xaxis(knight_walking),
-                    clip_set_to_list_on_xaxis(sword_walking)],
-                "attacking": [
-                    clip_set_to_list_on_xaxis(knight_attacking),
-                    clip_set_to_list_on_xaxis(sword_attacking)]
+            "sprite": {
+                "walking": {
+                    "default": clip_set_to_list_on_xaxis(knight_walking),
+                    "hit": clip_set_to_list_on_xaxis(
+                        palette_swap(knight_walking.convert(), hit_palette))
+                },
+                "attacking": {
+                    "default": clip_set_to_list_on_xaxis(knight_attacking),
+                    "hit": clip_set_to_list_on_xaxis(
+                        palette_swap(knight_attacking.convert(), hit_palette))
+                }
+            },
+            "sword": {
+                "walking": {
+                    "default": clip_set_to_list_on_xaxis(sword_walking),
+                    "hit": clip_set_to_list_on_xaxis(
+                        palette_swap(sword_walking.convert(), hit_palette)),
+                },
+                "attacking": {
+                    "default": clip_set_to_list_on_xaxis(sword_attacking),
+                    "hit": clip_set_to_list_on_xaxis(
+                        palette_swap(sword_attacking.convert(), hit_palette)),
+                }
             }
         }
         self.image_used = "default"
         self.doing = "walking"
 
     def init_rect(self):
-        image = self.images[self.image_used][self.doing]
         self.sword_offset = {
             "left": [-9, 2],
             "right": [12, 2]
         }
 
         # Sprite
-        size = image[0][self.idx].get_rect().size
-        self.sprite_rect = pygame.Rect(100, 100, *size)
+        image = self.images["sprite"][self.doing][self.image_used]
+        size = image[self.idx].get_rect().size
+        self.rect = pygame.Rect(100, 100, *size)
 
         # Sword
-        size = image[1][self.idx].get_rect().size
+        image = self.images["sword"][self.doing][self.image_used]
+        size = image[self.idx].get_rect().size
         self.sword_rect = pygame.Rect(
             100 + self.sword_offset["right"][0], 
             100 + self.sword_offset["right"][1], 
             *size)
 
+    def init_hit(self):
+        self.last_hit = time.perf_counter()
+        self.hit_time = 300  # milliseconds
+        self.is_hit = False
+
     def init_status(self):
+        self.max_health = 30
+        self.health = 30
         self.is_dead = False
         self.delete = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
-        imgs = self.images[self.image_used][self.doing][0]
+        imgs = self.images["sprite"][self.doing][self.image_used]
         if self.idx >= len(imgs) * 5:
             self.idx = 0
 
@@ -93,7 +119,7 @@ class NormalKnight:
 
     def draw_sword(self, display):
         # Images
-        imgs = self.images[self.image_used][self.doing][0]
+        imgs = self.images["sprite"][self.doing][self.image_used]
 
         # Direction
         img = imgs[self.idx // 5]
@@ -101,11 +127,11 @@ class NormalKnight:
             img = pygame.transform.flip(img, True, False)
 
         # Draw
-        display.blit(img, self.sprite_rect)
+        display.blit(img, self.rect)
 
     def draw_sprite(self, display):
         # Images
-        imgs = self.images[self.image_used][self.doing][1]
+        imgs = self.images["sword"][self.doing][self.image_used]
 
         # Direction
         img = imgs[self.idx // 5]
@@ -118,11 +144,12 @@ class NormalKnight:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
+        self.hit_timer()
 
     # Direction
     def facing(self, player):
         # Update Direction
-        if self.sprite_rect.centerx - player.rect.centerx > 0:  # left
+        if self.rect.centerx - player.rect.centerx > 0:  # left
             self.direction = "left"
         else:  # right
             self.direction = "right"
@@ -130,10 +157,30 @@ class NormalKnight:
         # Update Sword Rectangle
         self.update_swordrect()
 
+    # Hit
+    def hit_timer(self):
+        if self.is_hit:
+            dt = time.perf_counter() - self.last_hit
+            if dt * 1000 >= self.hit_time:
+                self.image_used = "default"
+                self.is_hit = False
+
     # Functions --------------------------------------------------- #
     # Direction
     def update_swordrect(self):
+        offset = self.sword_offset[self.direction]
         self.sword_rect = pygame.Rect(
-            self.sprite_rect.x + self.sword_offset[self.direction][0], 
-            self.sprite_rect.y + self.sword_offset[self.direction][1], 
+            self.rect.x + offset[0], 
+            self.rect.y + offset[1],
             *self.sword_rect.size)
+
+    # Hit
+    def hit(self, damage):
+        self.is_hit = True
+        self.health -= damage
+        if self.health <= 0:
+            self.is_dead = True
+            self.delete = True
+
+        self.image_used = "hit"
+        self.last_hit = time.perf_counter()
