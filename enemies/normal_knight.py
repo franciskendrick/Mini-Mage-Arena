@@ -1,5 +1,6 @@
 from functions import clip_set_to_list_on_xaxis, palette_swap
 from functions import separate_sets_from_xaxis, separate_sets_from_yaxis
+from supports import ManaCrystal
 import pygame
 import time
 import os
@@ -184,3 +185,8 @@ class NormalKnight:
 
         self.image_used = "hit"
         self.last_hit = time.perf_counter()
+
+    # Mana
+    def mana_reward(self, mana_crystals):
+        for _ in range(round(self.max_health * 1.5)):
+            mana_crystals.append(ManaCrystal(self.rect.center))
