@@ -79,8 +79,13 @@ class NormalKnight:
 
     def init_rect(self):
         self.sword_offset = {
-            "left": [-9, 2],
-            "right": [12, 2]
+            "walking": {
+                "left": [-9, 2],
+                "right": [12, 2]},
+            "attacking": {
+                "left": [-12, -5],
+                "right": [6, -5]
+            }
         }
 
         # Sprite
@@ -92,8 +97,8 @@ class NormalKnight:
         image = self.images["sword"][self.doing][self.image_used]
         size = image[self.idx].get_rect().size
         self.sword_rect = pygame.Rect(
-            100 + self.sword_offset["right"][0], 
-            100 + self.sword_offset["right"][1], 
+            100 + self.sword_offset[self.doing]["right"][0], 
+            100 + self.sword_offset[self.doing]["right"][1], 
             *size)
 
     def init_direction(self):
@@ -126,6 +131,8 @@ class NormalKnight:
         # Reset
         imgs = self.images["sprite"][self.doing][self.image_used]
         if self.idx >= len(imgs) * 5:
+            if self.doing == "attacking":
+                self.doing = "walking"
             self.idx = 0
 
         # Draw
@@ -151,6 +158,9 @@ class NormalKnight:
         # Images
         imgs = self.images["sword"][self.doing][self.image_used]
 
+        # Update Rectangle
+        self.update_swordrect()
+
         # Direction
         img = imgs[self.idx // 5]
         if self.direction == "left":
@@ -162,7 +172,8 @@ class NormalKnight:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
-        self.movement(player)
+        # self.movement(player)
+
         self.attack(player)
         self.hit_timer()
 
@@ -174,9 +185,6 @@ class NormalKnight:
         else:  # right
             self.direction = "right"
         
-        # Update Sword Rectangle
-        self.update_swordrect()
-
     # Movement
     def movement(self, player):
         self.move_left(player)
@@ -189,6 +197,9 @@ class NormalKnight:
         if self.sword_rect.colliderect(player.rect):
             dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
+                self.doing = "attacking"
+                self.idx = 0
+
                 player.hit(self.damage)
                 self.last_attack = time.perf_counter()
 
@@ -201,9 +212,9 @@ class NormalKnight:
                 self.is_hit = False
 
     # Functions --------------------------------------------------- #
-    # Direction
+    # Draw
     def update_swordrect(self):
-        offset = self.sword_offset[self.direction]
+        offset = self.sword_offset[self.doing][self.direction]
         self.sword_rect = pygame.Rect(
             self.rect.x + offset[0], 
             self.rect.y + offset[1],
