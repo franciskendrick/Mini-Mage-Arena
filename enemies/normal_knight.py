@@ -16,6 +16,7 @@ class NormalKnight:
         self.init_rect()
         self.init_direction()
         self.init_movement()
+        self.init_attack()
         self.init_hit()
         self.init_status()
 
@@ -101,6 +102,14 @@ class NormalKnight:
     def init_movement(self):
         self.vel = 2
 
+    def init_attack(self):
+        # Damage
+        self.damage = 5
+
+        # Time
+        self.last_attack = time.perf_counter()
+        self.attack_cooldown = 1000
+
     def init_hit(self):
         self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
@@ -154,6 +163,7 @@ class NormalKnight:
     def update(self, player):
         self.facing(player)
         self.movement(player)
+        self.attack(player)
         self.hit_timer()
 
     # Direction
@@ -173,6 +183,14 @@ class NormalKnight:
         self.move_right(player)
         self.move_up(player)
         self.move_down(player)
+
+    # Attack
+    def attack(self, player):
+        if self.sword_rect.colliderect(player.rect):
+            dt = time.perf_counter() - self.last_attack
+            if dt * 1000 >= self.attack_cooldown:  # cooldown
+                player.hit(self.damage)
+                self.last_attack = time.perf_counter()
 
     # Hit
     def hit_timer(self):
