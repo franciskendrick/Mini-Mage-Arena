@@ -1,7 +1,7 @@
 from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom, NormalKnight
 from supports import HealingPotion, ManaCrystal
 from player import Player
-from windows.game import PlayerGauge, status_bar
+from windows.game import PlayerGauge, status_bar, arena
 from windows import window
 import pygame
 import sys
