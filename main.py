@@ -99,8 +99,6 @@ def game_loop():
         # Player Gauge
         player_gauge.update(player.stats)
 
-        print(player.stats)
-
         # Update
         redraw_game()
         clock.tick(window.framerate)

@@ -12,7 +12,7 @@ class Window:
         self.framerate = 30
 
         # Game
-        self.arena_rect = pygame.Rect(0, 38, 640, 360-38)
+        self.arena_rect = pygame.Rect(0, 38, 640, 322)
         self.statbar_rect = pygame.Rect(0, 0, 640, 38)
 
 

@@ -1,12 +1,12 @@
 from .clip_image import clip
 
 
-def clip_set_to_list_on_xaxis(set):
+def clip_set_to_list_on_xaxis(set, y=0):
     images = []
 
     # Loop Over every Pixel in Tileset
     for x in range(set.get_width()):
-        pixel = set.get_at((x, 0))
+        pixel = set.get_at((x, y))
 
         # A Sprite/Tile is Found
         if pixel == (255, 0, 255, 255):  # magenta
@@ -16,7 +16,7 @@ def clip_set_to_list_on_xaxis(set):
             # Find the End of Sprites/Tiles in the X Coordinate
             while True:
                 wd += 1
-                pixel = set.get_at((x + wd, 0))
+                pixel = set.get_at((x + wd, y))
                 if pixel == (0, 255, 255, 255):  # cyan
                     break
 
@@ -42,12 +42,12 @@ def clip_set_to_list_on_xaxis(set):
     return images
 
 
-def clip_set_to_list_on_yaxis(set):
+def clip_set_to_list_on_yaxis(set, x=0):
     images = []
 
     # Loop Over every Pixel in Tileset
     for y in range(set.get_height()):
-        pixel = set.get_at((0, y))
+        pixel = set.get_at((x, y))
 
         # A Sprite/Tile is Found
         if pixel == (255, 0, 255, 255):  # magenta
@@ -64,7 +64,7 @@ def clip_set_to_list_on_yaxis(set):
             # Find the End of Sprites/Tiles in the Y Coordinate
             while True:
                 ht += 1
-                pixel = set.get_at((0, y + ht))
+                pixel = set.get_at((x, y + ht))
                 if pixel == (0, 255, 255, 255):  # cyan
                     break
 
