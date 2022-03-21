@@ -30,6 +30,7 @@ class Background:
         self.draw_arena_corners(display)
         self.draw_arena_topedge(display)
         self.draw_arena_leftedge(display)
+        self.draw_arena_rightedge(display)
 
     def draw_statusbar(self, display):
         image = self.images["black"]
@@ -65,12 +66,20 @@ class Background:
             display.blit(images[1], (x, y))
             x += wd
 
-    def draw_arena_sides(self, display):
+    def draw_arena_leftedge(self, display):
         images = self.images["sides"]
         _, ht = images[0].get_rect().size
         x, y = (0, 44)
         for _ in range(19):
             display.blit(images[0], (x, y))
+            y += ht
+
+    def draw_arena_rightedge(self, display):
+        images = self.images["sides"]
+        _, ht = images[1].get_rect().size
+        x, y = (624, 44)
+        for _ in range(19):
+            display.blit(images[1], (x, y))
             y += ht
 
         
