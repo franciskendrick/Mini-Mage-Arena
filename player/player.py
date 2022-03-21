@@ -20,6 +20,7 @@ class Player:
         self.init_hit()
         self.init_status()
         self.init_healthregen()
+        self.init_manaregen()
 
     def init_images(self):
         # Spriteset
@@ -88,6 +89,10 @@ class Player:
         self.last_healthregen = 0
         self.healthregen_cooldown = 5000  # milliseconds
 
+    def init_manaregen(self):
+        self.last_manaregen = 0
+        self.manaregen_cooldown = 2000  # milliseconds
+
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         self.draw_sprite(display)
@@ -121,6 +126,7 @@ class Player:
         self.attacks(enemies)
         self.hit_timer()
         self.regenerate_health()
+        self.regenerate_mana()
 
     # Direction
     def facing(self):
@@ -167,6 +173,14 @@ class Player:
             if dt * 1000 >= self.healthregen_cooldown:
                 self.stats["health"] += 1
                 self.last_healthregen = time.perf_counter()
+
+    # Mana Regen
+    def regenerate_mana(self):
+        if self.last_manaregen and self.stats["mana"] < self.maximum_stats["mana"]:
+            dt = time.perf_counter() - self.last_manaregen
+            if dt * 1000 >= self.manaregen_cooldown:
+                self.stats["mana"] += 1
+                self.last_manaregen = time.perf_counter()
 
     # Functions --------------------------------------------------- #
     # Movement
@@ -230,6 +244,7 @@ class Player:
 
                     # Time
                     self.last_attack = time.perf_counter()
+                    self.last_manaregen = time.perf_counter()
 
     def update_attack(self, enemies):
         remove_attack = []
