@@ -99,6 +99,8 @@ def game_loop():
         # Player Gauge
         player_gauge.update(player.stats)
 
+        print(player.stats)
+
         # Update
         redraw_game()
         clock.tick(window.framerate)
@@ -126,7 +128,7 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [NormalKnight()]
+    enemies = [Slime()]
     # enemies = []
     update_enemies = []
 

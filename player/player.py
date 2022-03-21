@@ -19,6 +19,7 @@ class Player:
         self.init_attack()
         self.init_hit()
         self.init_status()
+        self.init_healthregen()
 
     def init_images(self):
         # Spriteset
@@ -70,7 +71,7 @@ class Player:
         
         # Time 
         self.last_attack = time.perf_counter()
-        self.attack_cooldown = 500  # milliseconds
+        self.attack_cooldown = 100  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.perf_counter()
@@ -82,6 +83,10 @@ class Player:
             "mana": 120,
             "stamina": 20}
         self.stats = self.maximum_stats.copy()
+
+    def init_healthregen(self):
+        self.last_healthregen = 0
+        self.healthregen_cooldown = 5000  # milliseconds
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -115,6 +120,7 @@ class Player:
         self.movement()
         self.attacks(enemies)
         self.hit_timer()
+        self.regenerate_health()
 
     # Direction
     def facing(self):
@@ -152,6 +158,15 @@ class Player:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
+                self.last_healthregen = time.perf_counter()
+
+    # Health Regen
+    def regenerate_health(self):
+        if self.last_healthregen and self.stats["health"] < self.maximum_stats["health"]:
+            dt = time.perf_counter() - self.last_healthregen
+            if dt * 1000 >= self.healthregen_cooldown:
+                self.stats["health"] += 1
+                self.last_healthregen = time.perf_counter()
 
     # Functions --------------------------------------------------- #
     # Movement

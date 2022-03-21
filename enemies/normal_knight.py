@@ -172,8 +172,7 @@ class NormalKnight:
     # Update ------------------------------------------------------ #
     def update(self, player):
         self.facing(player)
-        # self.movement(player)
-
+        self.movement(player)
         self.attack(player)
         self.hit_timer()
 
