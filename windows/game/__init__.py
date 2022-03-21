@@ -1,3 +1,2 @@
 from .player_gauge import PlayerGauge
-from .status_bar import status_bar
-from .arena import arena
+from .background import background

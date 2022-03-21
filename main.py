@@ -1,7 +1,7 @@
 from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom, NormalKnight
 from supports import HealingPotion, ManaCrystal
 from player import Player
-from windows.game import PlayerGauge, status_bar, arena
+from windows.game import PlayerGauge, background
 from windows import window
 import pygame
 import sys
@@ -23,10 +23,10 @@ def redraw_game():
         potion.draw(display)
 
     # Player
+    background.draw(display)
     player.draw(display)
 
-    # Status Bar
-    status_bar.draw(display)
+    # Arena
     player_gauge.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
