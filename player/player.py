@@ -72,7 +72,7 @@ class Player:
         
         # Time 
         self.last_attack = time.perf_counter()
-        self.attack_cooldown = 100  # milliseconds
+        self.attack_cooldown = 500  # milliseconds
 
     def init_hit(self):
         self.last_hit = time.perf_counter()

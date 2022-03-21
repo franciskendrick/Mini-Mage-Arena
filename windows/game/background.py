@@ -18,7 +18,7 @@ class Background:
         
         # Images
         self.images = {}
-        order = ["black", "top", "bottom", "sides", "wall", "floor"]
+        order = ["black", "corners", "top", "bottom", "sides", "wall", "floor"]
         separated_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
         for name, separated_set in zip(order, separated_sets):
             image = clip_set_to_list_on_xaxis(separated_set)
@@ -27,6 +27,7 @@ class Background:
     # Draw -------------------------------------------------------- #
     def draw(self, display):
         self.draw_statusbar(display)
+        self.draw_arena_corners(display)
         self.draw_arena_topedge(display)
 
     def draw_statusbar(self, display):
@@ -41,27 +42,29 @@ class Background:
             y += ht
             x = 0
 
+    def draw_arena_corners(self, display):
+        images = self.images["corners"]
+
+        # TopLeft Corner
+        display.blit(images[0], (0, 32))
+
+        # TopRight Corner
+        display.blit(images[1], (624, 32))
+
     def draw_arena_topedge(self, display):
         images = self.images["top"]
         wd, _ = images[0].get_rect().size
-        x = 0
+        x = self.images["corners"][0].get_rect().size[0]
         y = 32
         
-        # TopLeft Corner
-        display.blit(images[0], (x, y))
-        x += wd
-
         # First Top Edge
-        display.blit(images[1], (x, y))
+        display.blit(images[0], (x, y))
         x += wd
 
         # The Rest of Top Edge
         for _ in range((window.rect.width // wd) - 3):
-            display.blit(images[2], (x, y))
+            display.blit(images[1], (x, y))
             x += wd
 
-        # TopRight Corner
-        display.blit(images[3], (x, y))
-
-
+        
 background = Background()
