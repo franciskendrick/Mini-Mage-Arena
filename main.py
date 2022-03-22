@@ -11,6 +11,9 @@ import sys
 def redraw_game():
     display.fill((100, 100, 120))
 
+    # Background
+    background.draw(display)
+
     # Enemies
     enemies_list = enemies + update_enemies
     for enemy in enemies_list:
@@ -23,7 +26,6 @@ def redraw_game():
         potion.draw(display)
 
     # Player
-    background.draw(display)
     player.draw(display)
 
     # Arena
@@ -126,8 +128,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [Slime()]
-    enemies = []
+    enemies = [NormalKnight()]
+    # enemies = []
     update_enemies = []
 
     # Supports

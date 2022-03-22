@@ -41,39 +41,22 @@ class NormalKnight:
             (117, 36, 56): (129, 151, 150)}
 
         # Images
-        walking_spriteset, attacking_spriteset = separate_sets_from_yaxis(
-            spriteset, (255, 0, 0))
-        knight_walking, sword_walking = separate_sets_from_xaxis(
-            walking_spriteset, (0, 255, 0))
-        knight_attacking, sword_attacking = separate_sets_from_xaxis(
-            attacking_spriteset, (0, 255, 0))
-
         self.images = {
-            "sprite": {
-                "walking": {
-                    "default": clip_set_to_list_on_xaxis(knight_walking),
+            "sprite": {},
+            "sword": {}}
+        action_order = ["walking", "attacking"]
+        sprite_set = ["sprite", "sword"]
+
+        action_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
+        for a_idx, action_set in enumerate(action_sets):
+            sprite_sets = separate_sets_from_xaxis(action_set, (0, 255, 0))
+            for s_idx, sprite in enumerate(sprite_sets):
+                self.images[sprite_set[s_idx]][action_order[a_idx]] = {
+                    "default": clip_set_to_list_on_xaxis(sprite),
                     "hit": clip_set_to_list_on_xaxis(
-                        palette_swap(knight_walking.convert(), hit_palette))
-                },
-                "attacking": {
-                    "default": clip_set_to_list_on_xaxis(knight_attacking),
-                    "hit": clip_set_to_list_on_xaxis(
-                        palette_swap(knight_attacking.convert(), hit_palette))
+                        palette_swap(sprite.convert(), hit_palette))
                 }
-            },
-            "sword": {
-                "walking": {
-                    "default": clip_set_to_list_on_xaxis(sword_walking),
-                    "hit": clip_set_to_list_on_xaxis(
-                        palette_swap(sword_walking.convert(), hit_palette)),
-                },
-                "attacking": {
-                    "default": clip_set_to_list_on_xaxis(sword_attacking),
-                    "hit": clip_set_to_list_on_xaxis(
-                        palette_swap(sword_attacking.convert(), hit_palette)),
-                }
-            }
-        }
+
         self.image_used = "default"
         self.doing = "walking"
 
