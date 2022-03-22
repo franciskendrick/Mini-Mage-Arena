@@ -29,6 +29,7 @@ class Background:
         self.draw_statusbar(display)
         self.draw_arena_corners(display)
         self.draw_arena_topedge(display)
+        self.draw_arena_bottomedge(display)
         self.draw_arena_leftedge(display)
         self.draw_arena_rightedge(display)
 
@@ -62,6 +63,20 @@ class Background:
         x += wd
 
         # The Rest of Top Edge
+        for _ in range(37):
+            display.blit(images[1], (x, y))
+            x += wd
+
+    def draw_arena_bottomedge(self, display):
+        images = self.images["bottom"]
+        wd, _ = images[0].get_rect().size
+        x, y = (16, 348)
+
+        # First Bottom Edge
+        display.blit(images[0], (x, y))
+        x += wd
+        
+        # The Rest of Bottom Edge
         for _ in range(37):
             display.blit(images[1], (x, y))
             x += wd
