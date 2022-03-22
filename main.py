@@ -31,6 +31,8 @@ def redraw_game():
     # Arena
     player_gauge.draw(display)
 
+    pygame.draw.rect(display, (255, 0, 0), window.arena_rect, 1)
+
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
     win.blit(resized_display, (0, 0))
@@ -128,8 +130,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [NormalKnight()]
-    # enemies = []
+    # enemies = [Boomshroom()]
+    enemies = []
     update_enemies = []
 
     # Supports
