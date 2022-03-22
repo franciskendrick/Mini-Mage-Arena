@@ -33,14 +33,15 @@ class Background:
         self.draw_arena_leftedge(display)
         self.draw_arena_rightedge(display)
         self.draw_arena_wall(display)
+        self.draw_arena_floor(display)
 
     # Status Bar
     def draw_statusbar(self, display):
         image = self.images["black"]
         wd, ht = image.get_rect().size
         x, y = (0, 0)
-        for _ in range(2):
-            for _ in range(window.rect.width // wd):
+        for _ in range(2):  # y axis
+            for _ in range(window.rect.width // wd):  # x axis
                 display.blit(image, (x, y))
                 x += wd
             y += ht
@@ -115,6 +116,23 @@ class Background:
         for _ in range(38):
             display.blit(images, (x, y))
             x += wd
+
+    # Arena's Floor
+    def draw_arena_floor(self, display):
+        images = self.images["floor"]
+        wd, ht = images.get_rect().size
+        x, y = (16, 60)
+        # for _ in range(38):  # x axis
+        #     for _ in range(18):  # y axis
+        #         display.blit(images, (x, y))
+        #         x += wd
+        #     y += ht
+        for _ in range(18):  # y axis
+            for _ in range(38):  # x axis
+                display.blit(images, (x, y))
+                x += wd
+            y += ht
+            x = 16
 
         
 background = Background()
