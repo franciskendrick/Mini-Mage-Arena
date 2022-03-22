@@ -9,16 +9,22 @@ import sys
 
 # Redraw
 def redraw_game():
-    display.fill((100, 100, 120))
+    all_enemies_list = enemies + update_enemies
+    enemies_list = []
+    exploded_boomshrom_list = []
+    for enemy in all_enemies_list:
+        if isinstance(enemy, Boomshroom) and enemy.exploded:
+            exploded_boomshrom_list.append(enemy)
+        else:
+            enemies_list.append(enemy)
 
     # Background
-    background.draw(display)
+    background.draw_inside_arena(display)
 
     # Enemies
-    enemies_list = enemies + update_enemies
     for enemy in enemies_list:
         enemy.draw(display)
-
+    
     # Supports
     for mana in mana_crystals:
         mana.draw(display)
@@ -28,10 +34,16 @@ def redraw_game():
     # Player
     player.draw(display)
 
-    # Arena
-    player_gauge.draw(display)
+    # Background
+    background.draw_outside_arena(display)
 
-    pygame.draw.rect(display, (255, 0, 0), window.arena_rect, 1)
+    # Exploded Boomshroom
+    for enemy in exploded_boomshrom_list:
+        enemy.draw(display)
+
+    # Status Bar
+    background.draw_statusbar(display)
+    player_gauge.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
@@ -130,8 +142,8 @@ if __name__ == "__main__":
     player_gauge = PlayerGauge()
 
     # Enemies
-    # enemies = [Boomshroom()]
-    enemies = []
+    enemies = [Boomshroom()]
+    # enemies = []
     update_enemies = []
 
     # Supports

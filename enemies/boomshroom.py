@@ -69,7 +69,8 @@ class Boomshroom:
         self.resized_explosion_offset = [-10, -19]
         size = self.explosion_images[self.explosion_idx].get_rect().size
         self.explosion_rect = pygame.Rect(
-            100 + explosion_offset[0], 100 + explosion_offset[1], *size)
+            self.rect.x + explosion_offset[0], 
+            self.rect.y + explosion_offset[1], *size)
 
     def init_direction(self):
         self.direction = None

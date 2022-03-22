@@ -25,15 +25,16 @@ class Background:
             self.images[name] = image
 
     # Draw -------------------------------------------------------- #
-    def draw(self, display):
-        self.draw_statusbar(display)
+    def draw_inside_arena(self, display):
+        self.draw_arena_wall(display)
+        self.draw_arena_floor(display)
+
+    def draw_outside_arena(self, display):
         self.draw_arena_corners(display)
         self.draw_arena_topedge(display)
         self.draw_arena_bottomedge(display)
         self.draw_arena_leftedge(display)
         self.draw_arena_rightedge(display)
-        self.draw_arena_wall(display)
-        self.draw_arena_floor(display)
 
     # Status Bar
     def draw_statusbar(self, display):
