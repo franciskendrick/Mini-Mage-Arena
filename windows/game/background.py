@@ -53,6 +53,12 @@ class Background:
         # TopRight Corner
         display.blit(images[1], (624, 32))
 
+        # BottomLeft Corner
+        display.blit(images[2], (0, 348))
+
+        # BottomRight Corner
+        display.blit(images[3], (624, 348))
+
     def draw_arena_topedge(self, display):
         images = self.images["top"]
         wd, _ = images[0].get_rect().size
