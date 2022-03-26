@@ -1,5 +1,8 @@
 {
-    "enlarge": 2,
     "shadow_offset": [-2, 2],
-    "title_position": [87, 42]
+    "title_position": [87, 42],
+    "buttons_position": {
+        "play": [133, 109],
+        "options": [117, 133]
+    }
 }

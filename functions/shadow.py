@@ -2,7 +2,7 @@ from .color_palette_swap import palette_swap
 import pygame
 
 
-def get_shadow(img, rect, shadow_offset, shadow_color=(21, 29, 40)):
+def get_shadow(img, rect, shadow_offset, shadow_color=(57, 74, 80)):
     # Get Palette
     handle_img = img.copy()
     palette = {}

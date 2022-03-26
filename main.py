@@ -140,7 +140,7 @@ def menu_loop():
                 run = False
 
         # Update
-        redraw_menu()
+        redraw_menu()   
         clock.tick(window.framerate)
 
     pygame.quit()
