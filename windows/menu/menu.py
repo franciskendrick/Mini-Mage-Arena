@@ -20,11 +20,7 @@ with open(f"{path}/data/menu.json") as json_file:
 
 
 class Title:
-    # Initialize -------------------------------------------------- #
     def __init__(self):
-        self.init_images()
-
-    def init_images(self):
         animation_set = pygame.image.load(
             f"{path}/assets/title_animation.png")
         self.idx = 0
@@ -53,7 +49,6 @@ class Title:
             ]
             self.frames.append(slide)
 
-    # Draw -------------------------------------------------------- #
     def draw(self, display):
         # Reset
         if self.idx >= len(self.frames) * 5:
@@ -94,12 +89,13 @@ class Buttons:
                 img, img_rect, menu_data["shadow_offset"])
             hitbox = pygame.Rect(
                 img_rect.x * enlarge, img_rect.y * enlarge,
-                img_rect.width * enlarge, img_rect.height * enlarge)
+                img_rect.width * 2 * enlarge, img_rect.height * 2 * enlarge)
 
             # Resize
             wd, ht = img.get_size()
             size = (wd * 2, ht * 2)
             img = pygame.transform.scale(img, size)
+            hover_img = pygame.transform.scale(hover_img, size)
             shadow_img = pygame.transform.scale(shadow_img, size)
 
             # Append
@@ -149,6 +145,23 @@ class Menu:
         resized_display = pygame.transform.scale(
             self.display, display.get_size())
         display.blit(resized_display, self.rect)
+
+    def get_button_pressed(self, event):
+        if event.type == pygame.MOUSEBUTTONUP:
+            for (name, button) in self.buttons.buttons.items():
+                *_, hitbox = button
+                
+                mouse_pos = pygame.mouse.get_pos()
+                if hitbox.collidepoint(mouse_pos):
+                    return name
+
+    def handle_mousemotion(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            for button in self.buttons.buttons.values():
+                *_, hitbox = button
+
+                mouse_pos = pygame.mouse.get_pos()
+                button[0] = True if hitbox.collidepoint(mouse_pos) else False
 
 
 menu = Menu()

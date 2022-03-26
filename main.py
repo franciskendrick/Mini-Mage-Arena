@@ -5,6 +5,11 @@ import pygame
 import sys
 
 
+# Functions
+def placeholder():  # !!!   
+    pass
+
+
 # Redraw
 def redraw_game():
     all_enemies_list = enemies + update_enemies
@@ -133,11 +138,23 @@ def game_loop():
 
 
 def menu_loop():
+    btn_switchcase = {
+        "play": [game_loop],
+        "options": [placeholder],
+        None: [placeholder]
+    }
+
     run = True
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+
+        # Menu Buttons
+        btn_pressed = menu.get_button_pressed(event)
+        for function in btn_switchcase[btn_pressed]:
+            function()
+        menu.handle_mousemotion(event)
 
         # Update
         redraw_menu()   
