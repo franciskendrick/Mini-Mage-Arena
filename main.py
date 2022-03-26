@@ -49,6 +49,19 @@ def redraw_game():
     pygame.display.update()
 
 
+def redraw_menu():
+    # Background
+    background.draw_inside_arena(display)
+    background.draw_outside_arena(display)
+    background.draw_statusbar(display)
+
+    # Blit to Screen ---------------------------------------------- #
+    resized_display = pygame.transform.scale(display, win_size)
+    win.blit(resized_display, (0, 0))
+
+    pygame.display.update()
+
+
 # Loop
 def game_loop():
     run = True
@@ -120,6 +133,21 @@ def game_loop():
     sys.exit()
 
 
+def menu_loop():
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # Update
+        redraw_menu()
+        clock.tick(window.framerate)
+
+    pygame.quit()
+    sys.quit()
+
+
 if __name__ == "__main__":
     pygame.init()
     
@@ -136,4 +164,4 @@ if __name__ == "__main__":
     player, player_gauge, (enemies, update_enemies), (mana_crystals, healing_potions) = entities.init()
 
     # Execute
-    game_loop()
+    menu_loop()
