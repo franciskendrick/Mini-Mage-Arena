@@ -1,11 +1,18 @@
 from functions import clip_set_to_list_on_yaxis, get_shadow
-from windows import window
+from windows import window, background
 import pygame
 import json
 import os
 
 pygame.init()
 path = os.path.dirname(os.path.realpath(__file__))
+
+# Windows
+win_size = (
+    window.rect.width * window.enlarge,
+    window.rect.height * window.enlarge)
+win = pygame.display.set_mode(win_size)
+display = pygame.Surface(window.rect.size)
 
 # Json
 with open(f"{path}/data/menu.json") as json_file:
@@ -48,6 +55,20 @@ class Title:
             ]
             self.frames.append(slide)
 
+    # Draw -------------------------------------------------------- #
+    def draw(self, display):
+        # Reset
+        if self.idx >= len(self.frames) * 5:
+            self.idx = 0
+
+        # Draw
+        img, img_rect, shadow_img, shadow_rect = self.frames[self.idx // 5]
+        display.blit(shadow_img, shadow_rect)  # shadow
+        display.blit(img, img_rect)  # image
+
+        # Update
+        self.idx += 1
+
 
 class Buttons:
     def __init__(self):
@@ -57,7 +78,27 @@ class Buttons:
 class Menu:
     def __init__(self):
         wd, ht = window.rect.size
-        self.display = pygame.Surface((wd, ht))
+        self.display = pygame.Surface((wd // 2, ht // 2), pygame.SRCALPHA)
+        self.display.convert_alpha()
+        self.rect = pygame.Rect((0, 0), self.display.get_size())
+
+        self.title = Title()
 
     def draw(self, display):
-        pass
+        self.display.fill((0, 0, 0, 0))
+
+        # Background
+        background.draw_inside_arena(display)
+        background.draw_outside_arena(display)
+        background.draw_statusbar(display)
+
+        # Title
+        self.title.draw(self.display)
+
+        # Blit to Display
+        resized_display = pygame.transform.scale(
+            self.display, display.get_size())
+        display.blit(resized_display, self.rect)
+
+
+menu = Menu()

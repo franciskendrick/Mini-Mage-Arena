@@ -1,5 +1,6 @@
 from enemies import Boomshroom
 from windows import window, background, entities
+from windows.menu import menu
 import pygame
 import sys
 
@@ -50,10 +51,8 @@ def redraw_game():
 
 
 def redraw_menu():
-    # Background
-    background.draw_inside_arena(display)
-    background.draw_outside_arena(display)
-    background.draw_statusbar(display)
+    # Menu
+    menu.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
