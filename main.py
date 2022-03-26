@@ -145,7 +145,7 @@ def menu_loop():
         clock.tick(window.framerate)
 
     pygame.quit()
-    sys.quit()
+    sys.exit()
 
 
 if __name__ == "__main__":
