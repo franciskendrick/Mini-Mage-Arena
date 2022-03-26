@@ -1,8 +1,5 @@
-from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom, NormalKnight
-from supports import HealingPotion, ManaCrystal
-from player import Player
-from windows import window, background
-from windows.game import PlayerGauge
+from enemies import Boomshroom
+from windows import window, background, entities
 import pygame
 import sys
 
@@ -135,23 +132,8 @@ if __name__ == "__main__":
     pygame.display.set_caption("Mini Mage Arena")
     clock = pygame.time.Clock()
 
-    # Player
-    player = Player()
-
-    # Windows
-    player_gauge = PlayerGauge()
-
-    # Enemies
-    enemies = [Boomshroom()]
-    # enemies = []
-    update_enemies = []
-
-    # Supports
-    # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
-    mana_crystals = []
-
-    # healing_potions = [HealingPotion()]
-    healing_potions = []
+    # Entities
+    player, player_gauge, (enemies, update_enemies), (mana_crystals, healing_potions) = entities.init()
 
     # Execute
     game_loop()
