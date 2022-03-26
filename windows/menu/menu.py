@@ -89,12 +89,18 @@ class Buttons:
             # Initialize
             hover_img = palette_swap(img.convert(), hover_palette)
             img_rect = pygame.Rect(
-                menu_data["buttons_position"][name], img.get_rect())
+                menu_data["buttons_position"][name], img.get_rect().size)
             shadow_img, shadow_rect = get_shadow(
                 img, img_rect, menu_data["shadow_offset"])
             hitbox = pygame.Rect(
                 img_rect.x * enlarge, img_rect.y * enlarge,
                 img_rect.width * enlarge, img_rect.height * enlarge)
+
+            # Resize
+            wd, ht = img.get_size()
+            size = (wd * 2, ht * 2)
+            img = pygame.transform.scale(img, size)
+            shadow_img = pygame.transform.scale(shadow_img, size)
 
             # Append
             button = [
@@ -108,6 +114,14 @@ class Buttons:
             ]
             self.buttons[name] = button
 
+    def draw(self, display):
+        for button in self.buttons.values():
+            is_hovered, orig_img, hover_img, img_rect, shadow_img, shadow_rect, _ = button
+            img = hover_img if is_hovered else orig_img
+
+            display.blit(shadow_img, shadow_rect)  # shadow
+            display.blit(img, img_rect)  # image
+
 
 class Menu:
     def __init__(self):
@@ -117,6 +131,7 @@ class Menu:
         self.rect = pygame.Rect((0, 0), self.display.get_size())
 
         self.title = Title()
+        self.buttons = Buttons()
 
     def draw(self, display):
         self.display.fill((0, 0, 0, 0))
@@ -126,8 +141,9 @@ class Menu:
         background.draw_outside_arena(display)
         background.draw_statusbar(display)
 
-        # Title
+        # Menu
         self.title.draw(self.display)
+        self.buttons.draw(self.display)
 
         # Blit to Display
         resized_display = pygame.transform.scale(
