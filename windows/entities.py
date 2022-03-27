@@ -23,8 +23,8 @@ def init():
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
     mana_crystals = []
 
-    stamina_potions = [StaminaPotion()]
-    # stamina_potions = []
+    # stamina_potions = [StaminaPotion()]
+    stamina_potions = []
     update_stamina_potions = []
 
     # Return Entities

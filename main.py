@@ -61,6 +61,9 @@ def redraw_menu():
     # Menu
     menu.draw(display)
 
+    # Player
+    player.draw_sprite(display)
+
     # Blit to Screen ---------------------------------------------- #
     resized_display = pygame.transform.scale(display, win_size)
     win.blit(resized_display, (0, 0))
@@ -181,6 +184,9 @@ def menu_loop():
             function()
         menu.handle_mousemotion(event)
 
+        # Player
+        player.facing()
+
         # Update
         redraw_menu()   
         clock.tick(window.framerate)
@@ -209,4 +215,4 @@ if __name__ == "__main__":
     ] = entities.init()
 
     # Execute
-    game_loop()
+    menu_loop()

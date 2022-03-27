@@ -46,7 +46,7 @@ class Player:
 
     def init_rect(self):
         size = self.images[self.image_used][self.idx].get_rect().size
-        self.rect = pygame.Rect(320, 180, *size)
+        self.rect = pygame.Rect(312, 203, *size)
 
     def init_direction(self):
         self.direction = None
