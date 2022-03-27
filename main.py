@@ -33,6 +33,8 @@ def redraw_game():
         mana.draw(display)
     for potion in healing_potions:
         potion.draw(display)
+    for potion in stamina_potions:
+        potion.draw(display)
 
     # Player
     player.draw(display)
@@ -126,6 +128,29 @@ def game_loop():
             if potion in healing_potions:
                 healing_potions.remove(potion)
 
+        # Stamina Potion
+        remove_potion = []
+        for potion in stamina_potions:
+            potion.update(player)
+            if potion.absorbed:
+                update_stamina_potions.append(potion)
+                remove_potion.append(potion)
+
+        for potion in remove_potion:
+            if potion in stamina_potions:
+                stamina_potions.remove(potion)
+
+        # Update Stamina Potion
+        remove_potion = []
+        for potion in update_stamina_potions:
+            potion.update(player)
+            if potion.absorbed and potion.effect_lasted:
+                remove_potion.append(potion)
+
+        for potion in remove_potion:
+            if potion in stamina_potions:
+                stamina_potions.remove(potion)
+
         # Player Gauge
         player_gauge.update(player.stats)
 
@@ -177,7 +202,11 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     # Entities
-    player, player_gauge, (enemies, update_enemies), (mana_crystals, healing_potions) = entities.init()
+    [
+        player, player_gauge, 
+        (enemies, update_enemies), 
+        (healing_potions, mana_crystals, (stamina_potions, update_stamina_potions))
+    ] = entities.init()
 
     # Execute
     game_loop()

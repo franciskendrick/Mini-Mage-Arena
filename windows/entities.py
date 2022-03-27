@@ -17,17 +17,20 @@ def init():
     update_enemies = []
 
     # Supports
+    # healing_potions = [HealingPotion()]
+    healing_potions = []
+
     # mana_crystals = [ManaCrystal((100, 100)) for _ in range(10)]
     mana_crystals = []
 
-    # healing_potions = [HealingPotion()]
-    healing_potions = [StaminaPotion()]
-    # healing_potions = []
+    stamina_potions = [StaminaPotion()]
+    # stamina_potions = []
+    update_stamina_potions = []
 
     # Return Entities
     entities = [
         player, 
         player_gauge, 
         [enemies, update_enemies], 
-        [mana_crystals, healing_potions]]
+        [healing_potions, mana_crystals, [stamina_potions, update_stamina_potions]]]
     return entities

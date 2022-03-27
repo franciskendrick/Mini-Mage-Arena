@@ -58,7 +58,8 @@ class Player:
 
         # Time
         self.last_sprint = time.perf_counter()
-        self.stamina_time = 500  # milliseconds
+        self.stamina_degenerate = 500  # milliseconds
+        self.stamina_regenerate = 500  # milliseconds
 
     def init_attack(self):
         # Spell in Use
@@ -192,7 +193,7 @@ class Player:
 
                 # Update Stamina Stat
                 dt = time.perf_counter() - self.last_sprint
-                if dt * 1000 >= self.stamina_time:
+                if dt * 1000 >= self.stamina_degenerate:
                     self.stats["stamina"] -= 1
                     self.last_sprint = time.perf_counter()
             else:  # no stamina
@@ -202,7 +203,7 @@ class Player:
 
             # Update Stamina Stat
             dt = time.perf_counter() - self.last_sprint
-            if dt * 1000 >= self.stamina_time:
+            if dt * 1000 >= self.stamina_regenerate:
                 if self.stats["stamina"] < 20:
                     self.stats["stamina"] += 1
                 self.last_sprint = time.perf_counter()
