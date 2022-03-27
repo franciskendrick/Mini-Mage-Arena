@@ -180,4 +180,4 @@ if __name__ == "__main__":
     player, player_gauge, (enemies, update_enemies), (mana_crystals, healing_potions) = entities.init()
 
     # Execute
-    menu_loop()
+    game_loop()
