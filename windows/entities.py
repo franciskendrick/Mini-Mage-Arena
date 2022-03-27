@@ -1,5 +1,5 @@
 from enemies import Slime, DarkMage, Mushroom, Fireshroom, Boomshroom, NormalKnight
-from supports import HealingPotion, ManaCrystal
+from supports import HealingPotion, ManaCrystal, StaminaPotion
 from player import Player
 from windows.game import PlayerGauge
 
@@ -21,7 +21,8 @@ def init():
     mana_crystals = []
 
     # healing_potions = [HealingPotion()]
-    healing_potions = []
+    healing_potions = [StaminaPotion()]
+    # healing_potions = []
 
     # Return Entities
     entities = [

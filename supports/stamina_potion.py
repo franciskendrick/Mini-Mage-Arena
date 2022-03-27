@@ -11,6 +11,7 @@ class StaminaPotion:
     def __init__(self):
         self.init_images()
         self.init_rect()
+        self.absorbed = False
 
     def init_images(self):
         spriteset = pygame.image.load(
@@ -26,7 +27,16 @@ class StaminaPotion:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
+        # Reset
+        if self.idx >= len(self.images) * 3:
+            self.idx = 0
+
+        # Draw
+        img = self.images[self.idx // 3]
+        display.blit(img, self.rect)
+
+        # Update
+        self.idx += 1
 
     # Update ------------------------------------------------------ #
     def update(self, player):
