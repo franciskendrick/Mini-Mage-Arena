@@ -22,6 +22,7 @@ def redraw_game():
             enemies_list.append(enemy)
 
     # Background
+    background.draw_background(display)
     background.draw_inside_arena(display)
 
     # Enemies
@@ -47,7 +48,6 @@ def redraw_game():
         enemy.draw(display)
 
     # Status Bar
-    background.draw_statusbar(display)
     player_gauge.draw(display)
 
     # Blit to Screen ---------------------------------------------- #
