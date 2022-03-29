@@ -36,4 +36,10 @@ class Snowbilize:
 
     # Update ------------------------------------------------------ #
     def update(self, enemies):
-        pass
+        if not self.collided:
+            self.movement()
+
+    # Movement
+    def movement(self):
+        self.circle.center[0] += (self.x_vel * self.speed)
+        self.circle.center[1] += (self.y_vel * self.speed)
