@@ -111,7 +111,7 @@ class NormalKnight:
         self.direction = None
 
     def init_movement(self):
-        self.vel = 2
+        self.vel = 1
 
     def init_attack(self):
         # Damage
@@ -125,6 +125,10 @@ class NormalKnight:
         self.last_hit = time.perf_counter()
         self.hit_time = 300  # milliseconds
         self.is_hit = False
+
+        # Snowbilize
+        self.immobilized = False
+        self.time_of_freeze = None
 
     def init_status(self):
         self.max_health = 30
@@ -146,7 +150,8 @@ class NormalKnight:
         self.draw_sword(display)
 
         # Update
-        self.idx += 1
+        if not self.immobilized:
+            self.idx += 1
 
     def draw_sword(self, display):
         # Images
@@ -184,22 +189,23 @@ class NormalKnight:
 
     # Direction
     def facing(self, player):
-        # Update Direction
-        if self.rect.centerx - player.rect.centerx > 0:  # left
-            self.direction = "left"
-        else:  # right
-            self.direction = "right"
-        
+        if not self.immobilized:
+            if self.rect.centerx - player.rect.centerx > 0:  # left
+                self.direction = "left"
+            else:  # right
+                self.direction = "right"
+            
     # Movement
     def movement(self, player):
-        self.move_left(player)
-        self.move_right(player)
-        self.move_up(player)
-        self.move_down(player)
+        if not self.immobilized:
+            self.move_left(player)
+            self.move_right(player)
+            self.move_up(player)
+            self.move_down(player)
 
     # Attack
     def attack(self, player):
-        if self.sword_rect.colliderect(player.rect):
+        if self.sword_rect.colliderect(player.rect) and not self.immobilized:
             dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 self.doing = "attacking"
@@ -210,7 +216,7 @@ class NormalKnight:
 
     # Hit
     def hit_timer(self):
-        if self.is_hit:
+        if self.is_hit and not self.immobilized:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"

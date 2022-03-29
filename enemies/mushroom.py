@@ -77,6 +77,10 @@ class Mushroom:
         self.hit_time = 300  # milliseconds
         self.is_hit = False
 
+        # Snowbilize
+        self.immobilized = False
+        self.time_of_freeze = None
+
     def init_status(self):
         self.max_health = 12
         self.health = 12
@@ -104,7 +108,8 @@ class Mushroom:
                 display, (122, 54, 123), center, radius, 1)
 
         # Update
-        self.idx += 1
+        if not self.immobilized:
+            self.idx += 1
 
     # Update ------------------------------------------------------ #
     def update(self, player):
@@ -114,14 +119,15 @@ class Mushroom:
 
     # Direction
     def facing(self, player):
-        if self.rect.centerx - player.rect.centerx > 0:  # left
-            self.direction = "left"
-        else:  # right
-            self.direction = "right"
+        if not self.immobilized:
+            if self.rect.centerx - player.rect.centerx > 0:  # left
+                self.direction = "left"
+            else:  # right
+                self.direction = "right"
 
     # Attack
     def attack(self, player):
-        if self.attack_range.colliderect(player.rect):
+        if self.attack_range.colliderect(player.rect) and not self.immobilized:
             self.range_visibility = True
             dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
@@ -129,10 +135,10 @@ class Mushroom:
                 self.last_attack = time.perf_counter()
         else:
             self.range_visibility = False
-
+    
     # Hit
     def hit_timer(self):
-        if self.is_hit:
+        if self.is_hit and not self.immobilized:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"

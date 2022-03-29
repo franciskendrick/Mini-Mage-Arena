@@ -2,6 +2,7 @@ from functions import Circle, circle_edge_collision
 from windows import window
 import pygame
 import math
+import time
 
 pygame.init()
 
@@ -12,7 +13,8 @@ class Snowbilize:
         self.circle = Circle(origin, 4)
         self.init_color()
         self.init_movement(target)
-        self.damage = 3
+        self.init_attack()
+        self.init_freeze()
         self.mana_cost = 6
         self.collided = False
 
@@ -28,7 +30,19 @@ class Snowbilize:
         self.x_vel = math.cos(angle)
         self.y_vel = math.sin(angle)
 
-    # Draw -------------------------------------------------------- #
+    def init_attack(self):
+        self.direct_damage = 5
+        self.indirect_damage = 1
+
+    def init_freeze(self):
+        # Range
+        self.freeze_radius = 64
+        self.enemies_freezing = []
+
+        # Time
+        self.time_of_freeze = None
+        self.freeze_cooldown = 5000  # milliseconds
+
     def draw(self, display):
         center = self.circle.center
         radius = self.circle.radius
@@ -54,7 +68,33 @@ class Snowbilize:
     def entity_collision(self, enemies):
         for enemy in enemies:
             if self.circle.colliderect(enemy.rect):
-                enemy.hit(self.damage)
                 self.collided = True
 
+                # Freeze
+                self.time_of_freeze = time.perf_counter()
+                enemy.hit(self.direct_damage)
+                enemy.immobilized = True
+                enemy.image_used = "immobilized"
+
+                hit_enemy = enemy
+
+                # Freeze Surrounding Enemies
+                freeze_range = self.get_freeze_range(hit_enemy)
+                handle_enemies = enemies.copy()
+                handle_enemies.remove(hit_enemy)
+                for enemy in handle_enemies:
+                    if freeze_range.colliderect(enemy.rect):
+                        # Freeze
+                        self.enemies_freezing.append(enemy)
+                        enemy.hit(self.indirect_damage)
+                        enemy.immobilized = True
+                        enemy.image_used = "immobilized"
+
                 break
+
+    # Functions --------------------------------------------------- #
+    def get_freeze_range(self, enemy):
+        radius = (max(enemy.rect.width, enemy.rect.height) / 2) + self.freeze_radius
+        freeze_range = Circle(enemy.rect.center, radius)
+
+        return freeze_range

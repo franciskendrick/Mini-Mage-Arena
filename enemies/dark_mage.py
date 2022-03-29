@@ -70,6 +70,10 @@ class DarkMage:
         self.hit_time = 300  # milliseconds
         self.is_hit = False
 
+        # Snowbilize
+        self.immobilized = False
+        self.time_of_freeze = None
+
     def init_status(self):
         self.max_health = 20
         self.health = 20
@@ -99,7 +103,8 @@ class DarkMage:
         display.blit(img, self.rect)
 
         # Update
-        self.idx += 1
+        if not self.immobilized:
+            self.idx += 1
 
     def draw_attacks(self, display):
         for attack in self.attack_list:
@@ -119,10 +124,11 @@ class DarkMage:
 
     # Direction
     def facing(self, player):
-        if self.rect.centerx - player.rect.centerx > 0:  # left
-            self.direction = "left"
-        else:  # right
-            self.direction = "right"
+        if not self.immobilized:
+            if self.rect.centerx - player.rect.centerx > 0:  # left
+                self.direction = "left"
+            else:  # right
+                self.direction = "right"
 
     # Attack
     def attack(self, player):
@@ -131,7 +137,7 @@ class DarkMage:
 
     # Hit
     def hit_timer(self):
-        if self.is_hit:
+        if self.is_hit and not self.immobilized:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
@@ -140,16 +146,17 @@ class DarkMage:
     # Functions --------------------------------------------------- #
     # Attacks
     def append_attack(self, player):
-        dt = time.perf_counter() - self.last_attack
-        if dt * 1000 >= self.attack_cooldown:  # cooldown
-            target = (
-                player.rect.centerx * window.enlarge,
-                player.rect.centery * window.enlarge)
+        if not self.immobilized:
+            dt = time.perf_counter() - self.last_attack
+            if dt * 1000 >= self.attack_cooldown:  # cooldown
+                target = (
+                    player.rect.centerx * window.enlarge,
+                    player.rect.centery * window.enlarge)
 
-            attack = DarkFireBall(self.rect.center, target)
-            
-            self.attack_list.append(attack)
-            self.last_attack = time.perf_counter()
+                attack = DarkFireBall(self.rect.center, target)
+                
+                self.attack_list.append(attack)
+                self.last_attack = time.perf_counter()
 
     def update_attack(self, player):
         remove_attack = []

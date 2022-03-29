@@ -91,6 +91,10 @@ class Fireshroom:
         self.hit_time = 300  # milliseconds
         self.is_hit = False
 
+        # Snowbilize
+        self.immobilized = False
+        self.time_of_freeze = None
+
     def init_status(self):
         self.max_health = 12
         self.health = 12
@@ -119,7 +123,8 @@ class Fireshroom:
         display.blit(img, self.rect)
 
         # Update
-        self.idx += 1
+        if not self.immobilized:
+            self.idx += 1
 
     def draw_range(self, display):
         if self.range_visibility:
@@ -146,14 +151,15 @@ class Fireshroom:
 
     # Direction
     def facing(self, player):
-        if self.rect.centerx - player.rect.centerx > 0:  # left
-            self.direction = "left"
-        else:  # right
-            self.direction = "right"
+        if not self.immobilized:
+            if self.rect.centerx - player.rect.centerx > 0:  # left
+                self.direction = "left"
+            else:  # right
+                self.direction = "right"
 
     # Attack
     def attack(self, player):
-        if self.attack_range.colliderect(player.rect):
+        if self.attack_range.colliderect(player.rect) and not self.immobilized:
             self.range_visibility = True
             self.append_attack()
         else:
@@ -162,7 +168,7 @@ class Fireshroom:
 
     # Hit
     def hit_timer(self):
-        if self.is_hit:
+        if self.is_hit and not self.immobilized:
             dt = time.perf_counter() - self.last_hit
             if dt * 1000 >= self.hit_time:
                 self.image_used = "default"
@@ -173,11 +179,11 @@ class Fireshroom:
     def append_attack(self):
         dt = time.perf_counter() - self.last_attack
         if dt * 1000 >= self.attack_cooldown:  # cooldown
-            for target in self.targets:
-                attack = Fireball(self.rect.center, target)
-            
-                self.attack_list.append(attack)
-                self.last_attack = time.perf_counter()
+                for target in self.targets:
+                    attack = Fireball(self.rect.center, target)
+                
+                    self.attack_list.append(attack)
+                    self.last_attack = time.perf_counter()
 
     def update_attack(self, player):
         remove_attack = []
