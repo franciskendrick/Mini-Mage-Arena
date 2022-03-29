@@ -58,5 +58,3 @@ class FireBall:
                 self.collided = True
 
                 break
-
-    # Functions --------------------------------------------------- #
