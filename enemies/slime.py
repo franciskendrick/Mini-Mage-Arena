@@ -32,12 +32,20 @@ class Slime:
             (79, 143, 186): (199, 207, 204),
             (115, 190, 211): (235, 237, 233),
             (235, 237, 233): (235, 237, 233)}
+        immobilized_palette = {
+            (235, 237, 233): (235, 237, 233),
+            (115, 190, 211): (164, 221, 219),
+            (79, 143, 186): (115, 190, 211),
+            (60, 94, 139): (79, 143, 186),
+            (9, 10, 20): (37, 58, 94)}
 
         # Images
         self.images = {
             "default": clip_set_to_list_on_xaxis(spriteset),
             "hit": clip_set_to_list_on_xaxis(
-                palette_swap(spriteset.convert(), hit_palette))
+                palette_swap(spriteset.convert(), hit_palette)),
+            "immobilized": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), immobilized_palette))
         }
         self.image_used = "default"
 

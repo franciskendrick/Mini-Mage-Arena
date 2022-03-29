@@ -33,12 +33,20 @@ class DarkMage:
             (37, 86, 46): (199, 207, 204),
             (70, 130, 50): (235, 237, 233),
             (165, 48, 48): (235, 237, 233)}
+        immobilized_palette = {
+            (9, 10, 20): (37, 58, 94),
+            (25, 51, 45): (79, 143, 186),
+            (37, 86, 46): (115, 190, 211),
+            (70, 130, 50): (164, 221, 219),
+            (165, 48, 48): (235, 237, 233)}
 
         # Images
         self.images = {
             "default": clip_set_to_list_on_xaxis(spriteset),
             "hit": clip_set_to_list_on_xaxis(
-                palette_swap(spriteset.convert(), hit_palette))
+                palette_swap(spriteset.convert(), hit_palette)),
+            "immobilized": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), immobilized_palette))
         }
         self.image_used = "default"
 

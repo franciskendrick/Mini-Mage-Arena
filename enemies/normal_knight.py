@@ -39,6 +39,25 @@ class NormalKnight:
             (207, 87, 60): (235, 237, 233),
             (165, 48, 48): (168, 181, 178),
             (117, 36, 56): (129, 151, 150)}
+        immobilized_palette = {
+            "sprite": {
+                (129, 151, 150): (235, 237, 233),
+                (87, 114, 119): (164, 221, 219),
+                (57, 74, 80): (115, 190, 211),
+                (32, 46, 55): (79, 143, 186),
+                (21, 29, 40): (60, 94, 139),
+                (9, 10, 20): (37, 58, 94),
+                (207, 87, 60): (235, 237, 233),
+                (165, 48, 48): (115, 190, 211),
+                (117, 36, 56): (79, 143, 186)},
+            "sword": {
+                (235, 237, 233): (235, 237, 233),
+                (199, 207, 204): (164, 221, 219),
+                (168, 181, 178): (115, 190, 211),
+                (9, 10, 20): (37, 58, 94),
+                (122, 72, 65): (115, 190, 211),
+                (96, 44, 44): (79, 143, 186)}
+        }
 
         # Images
         self.images = {
@@ -50,11 +69,15 @@ class NormalKnight:
         action_sets = separate_sets_from_yaxis(spriteset, (255, 0, 0))
         for a_idx, action_set in enumerate(action_sets):
             sprite_sets = separate_sets_from_xaxis(action_set, (0, 255, 0))
-            for s_idx, sprite in enumerate(sprite_sets):
+            for s_idx, image in enumerate(sprite_sets):
                 self.images[sprite_set[s_idx]][action_order[a_idx]] = {
-                    "default": clip_set_to_list_on_xaxis(sprite),
+                    "default": clip_set_to_list_on_xaxis(image),
                     "hit": clip_set_to_list_on_xaxis(
-                        palette_swap(sprite.convert(), hit_palette))
+                        palette_swap(image.convert(), hit_palette)),
+                    "immobilized": clip_set_to_list_on_xaxis(
+                        palette_swap(
+                            image.convert(), 
+                            immobilized_palette[sprite_set[s_idx]]))
                 }
 
         self.image_used = "default"

@@ -35,12 +35,22 @@ class Fireshroom:
             (215, 181, 148): (168, 181, 178),
             (231, 213, 179): (199, 207, 204),
             (218, 134, 62): (235, 237, 233)}
+        immobilized_palette = {
+            (9, 10, 20): (37, 58, 94),
+            (117, 36, 56): (79, 143, 186),
+            (165, 48, 48): (115, 190, 211),
+            (207, 87, 60): (164, 221, 219),
+            (215, 181, 148): (115, 190, 211),
+            (231, 213, 179): (164, 221, 219),
+            (218, 134, 62): (235, 237, 233)}
 
         # Images
         self.images = {
             "default": clip_set_to_list_on_xaxis(spriteset),
             "hit": clip_set_to_list_on_xaxis(
-                palette_swap(spriteset.convert(), hit_palette))
+                palette_swap(spriteset.convert(), hit_palette)),
+            "immobilized": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), immobilized_palette))
         }
         self.image_used = "default"
 

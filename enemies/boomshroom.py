@@ -42,6 +42,13 @@ class Boomshroom:
             (32, 46, 55): (168, 181, 178),
             (57, 74, 80): (199, 207, 204),
             (165, 48, 48): (235, 237, 233)}
+        immobilized_palette = {
+            (9, 10, 20): (23, 32, 56),
+            (16, 20, 31): (60, 94, 139),
+            (21, 29, 40): (79, 143, 186),
+            (32, 46, 55): (79, 143, 186),
+            (57, 74, 80): (115, 190, 211),
+            (165, 48, 48): (164, 221, 219)}
 
         # Images
         self.images = {
@@ -49,7 +56,9 @@ class Boomshroom:
             "blink": clip_set_to_list_on_xaxis(
                 palette_swap(spriteset.convert(), blink_palette)),
             "hit": clip_set_to_list_on_xaxis(
-                palette_swap(spriteset.convert(), hit_palette))
+                palette_swap(spriteset.convert(), hit_palette)),
+            "immobilized": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), immobilized_palette))
         }
         self.image_used = "default"
 

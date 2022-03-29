@@ -33,12 +33,22 @@ class Mushroom:
             (215, 181, 148): (168, 181, 178),
             (231, 213, 179): (199, 207, 204),
             (235, 237, 233): (235, 237, 233)}
+        immobilized_palette = {
+            (9, 10, 20): (9, 10, 20),
+            (30, 29, 57): (23, 32, 56),
+            (64, 39, 81): (37, 58, 94),
+            (122, 54, 123): (60, 94, 139),
+            (215, 181, 148): (37, 58, 94),
+            (231, 213, 179): (60, 94, 139),
+            (235, 237, 233): (79, 143, 186)}
 
         # Images
         self.images = {
             "default": clip_set_to_list_on_xaxis(spriteset),
             "hit": clip_set_to_list_on_xaxis(
-                palette_swap(spriteset.convert(), hit_palette))
+                palette_swap(spriteset.convert(), hit_palette)),
+            "immobilized": clip_set_to_list_on_xaxis(
+                palette_swap(spriteset.convert(), immobilized_palette))
         }
         self.image_used = "default"
 
