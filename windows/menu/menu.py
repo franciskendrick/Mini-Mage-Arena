@@ -133,7 +133,6 @@ class Menu:
         self.display.fill((0, 0, 0, 0))
 
         # Background
-        background.draw_background(display)
         background.draw_inside_arena(display)
         background.draw_outside_arena(display)
 

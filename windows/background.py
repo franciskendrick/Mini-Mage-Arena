@@ -13,15 +13,15 @@ class Background:
             f"{path}/assets/arena_edges.png")
         self.arena_inside = pygame.image.load(
             f"{path}/assets/arena_inside.png")
+        self.arena_background = pygame.image.load(
+            f"{path}/assets/arena_background.png")
 
     # Draw -------------------------------------------------------- #
-    def draw_background(self, display):
-        display.fill(self.background_color)
-        
     def draw_inside_arena(self, display):
         display.blit(self.arena_inside, (16, 44))
 
     def draw_outside_arena(self, display):
+        display.blit(self.arena_background, (0, 0))
         display.blit(self.arena_edges, (10, 38))
 
         

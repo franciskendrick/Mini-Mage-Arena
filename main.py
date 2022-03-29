@@ -22,7 +22,6 @@ def redraw_game():
             enemies_list.append(enemy)
 
     # Background
-    background.draw_background(display)
     background.draw_inside_arena(display)
 
     # Enemies
