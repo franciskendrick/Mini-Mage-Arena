@@ -1,4 +1,4 @@
-from functions import Circle
+from functions import Circle, circle_edge_collision
 from windows import window
 import pygame
 import math
@@ -38,8 +38,23 @@ class Snowbilize:
     def update(self, enemies):
         if not self.collided:
             self.movement()
+            self.wall_collision()
+            self.entity_collision(enemies)
 
     # Movement
     def movement(self):
         self.circle.center[0] += (self.x_vel * self.speed)
         self.circle.center[1] += (self.y_vel * self.speed)
+
+    # Collisions
+    def wall_collision(self):
+        if circle_edge_collision(self.circle):
+            self.collided = True
+
+    def entity_collision(self, enemies):
+        for enemy in enemies:
+            if self.circle.colliderect(enemy.rect):
+                enemy.hit(self.damage)
+                self.collided = True
+
+                break
