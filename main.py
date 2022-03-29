@@ -215,4 +215,4 @@ if __name__ == "__main__":
     ] = entities.init()
 
     # Execute
-    menu_loop()
+    game_loop()

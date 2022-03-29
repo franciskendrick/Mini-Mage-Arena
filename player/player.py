@@ -1,5 +1,5 @@
 from functions import clip_set_to_list_on_xaxis, palette_swap, rect_edge_collision
-from spells.player import FireBall
+from spells.player import FireBall, Snowbilize
 from windows import window
 import pygame
 import time
@@ -64,9 +64,10 @@ class Player:
     def init_attack(self):
         # Spell in Use
         self.spells_available = {
-            "fireball": FireBall
+            "fireball": FireBall,
+            "snowbilize": Snowbilize
         }
-        self.spell_in_use = self.spells_available["fireball"]
+        self.spell_in_use = self.spells_available["snowbilize"]
 
         # Attack Lists
         self.attack_list = []
@@ -229,7 +230,8 @@ class Player:
             dt = time.perf_counter() - self.last_attack
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 spell_arguments = {
-                    FireBall: (self.rect.center, pygame.mouse.get_pos())
+                    FireBall: (self.rect.center, pygame.mouse.get_pos()),
+                    Snowbilize: (self.rect.center, pygame.mouse.get_pos())
                 }
 
                 # Attack

@@ -30,7 +30,9 @@ class Snowbilize:
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
-        pass
+        center = self.circle.center
+        radius = self.circle.radius
+        pygame.draw.circle(display, self.color, center, radius)
 
     # Update ------------------------------------------------------ #
     def update(self, enemies):
