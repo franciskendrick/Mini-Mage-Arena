@@ -1,5 +1,5 @@
 from functions import clip_set_to_list_on_xaxis, palette_swap, rect_edge_collision
-from spells.player import FireBall, Snowbilize
+from spells.player import FireBall, Snowbilize, Thunderbolt
 from windows import window
 import pygame
 import time
@@ -65,9 +65,10 @@ class Player:
         # Spell in Use
         self.spells_available = {
             "fireball": FireBall,
-            "snowbilize": Snowbilize
+            "snowbilize": Snowbilize,
+            "thunderbolt": Thunderbolt
         }
-        self.spell_in_use = self.spells_available["snowbilize"]
+        self.spell_in_use = self.spells_available["thunderbolt"]
 
         # Attack Lists
         self.attack_list = []
@@ -232,7 +233,8 @@ class Player:
             if dt * 1000 >= self.attack_cooldown:  # cooldown
                 spell_arguments = {
                     FireBall: (self.rect.center, pygame.mouse.get_pos()),
-                    Snowbilize: (self.rect.center, pygame.mouse.get_pos())
+                    Snowbilize: (self.rect.center, pygame.mouse.get_pos()),
+                    Thunderbolt: [pygame.mouse.get_pos()]
                 }
 
                 # Attack
@@ -264,7 +266,6 @@ class Player:
             self.attack_list.remove(attack)
 
         # Update Attack List
-        print(len(self.update_attack_list))
         remove_attack = []
         for attack in self.update_attack_list:
             attack.update(enemies)

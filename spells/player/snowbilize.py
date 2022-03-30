@@ -32,7 +32,7 @@ class Snowbilize:
 
     def init_attack(self):
         self.direct_damage = 5
-        self.indirect_damage = 1
+        self.indirect_damage = 2
 
     def init_freeze(self):
         # Range
