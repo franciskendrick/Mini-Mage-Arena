@@ -1,5 +1,5 @@
 from functions import clip_set_to_list_on_xaxis, palette_swap, rect_edge_collision
-from spells.player import FireBall, Snowbilize, Thunderbolt
+from spells.player import FireBall, Snowbilize, Thunderbolt, WaterDrop
 from windows import window
 import pygame
 import time
@@ -66,9 +66,10 @@ class Player:
         self.spells_available = {
             "fireball": FireBall,
             "snowbilize": Snowbilize,
-            "thunderbolt": Thunderbolt
+            "thunderbolt": Thunderbolt,
+            "water_drop": WaterDrop
         }
-        self.spell_in_use = self.spells_available["thunderbolt"]
+        self.spell_in_use = self.spells_available["water_drop"]
 
         # Attack Lists
         self.attack_list = []
@@ -234,7 +235,8 @@ class Player:
                 spell_arguments = {
                     FireBall: (self.rect.center, pygame.mouse.get_pos()),
                     Snowbilize: (self.rect.center, pygame.mouse.get_pos()),
-                    Thunderbolt: [pygame.mouse.get_pos()]
+                    Thunderbolt: [pygame.mouse.get_pos()],
+                    WaterDrop: (self.rect.center, pygame.mouse.get_pos())
                 }
 
                 # Attack
