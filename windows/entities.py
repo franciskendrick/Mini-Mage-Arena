@@ -12,7 +12,7 @@ def init():
     player_gauge = PlayerGauge()
 
     # Enemies
-    enemies = [Boomshroom()]
+    enemies = [Slime()]
     # enemies = []
     update_enemies = []
 

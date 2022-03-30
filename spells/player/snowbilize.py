@@ -16,7 +16,7 @@ class Snowbilize:
         self.init_attack()
         self.init_freeze()
         self.mana_cost = 6
-        self.collided = False
+        self.init_status()
 
     def init_color(self):
         self.color = (164, 221, 219)
@@ -43,6 +43,11 @@ class Snowbilize:
         self.time_of_freeze = None
         self.freeze_cooldown = 5000  # milliseconds
 
+    def init_status(self):
+        self.collided = False
+        self.delete = False
+
+    # Draw -------------------------------------------------------- #
     def draw(self, display):
         center = self.circle.center
         radius = self.circle.radius
@@ -54,6 +59,8 @@ class Snowbilize:
             self.movement()
             self.wall_collision()
             self.entity_collision(enemies)
+        else:
+            self.defreeze()
 
     # Movement
     def movement(self):
@@ -64,33 +71,43 @@ class Snowbilize:
     def wall_collision(self):
         if circle_edge_collision(self.circle):
             self.collided = True
+            self.delete = True
 
     def entity_collision(self, enemies):
         for enemy in enemies:
             if self.circle.colliderect(enemy.rect):
                 self.collided = True
+                self.freeze(enemy, enemies)
+                break
 
+    # Attack
+    def freeze(self, hit_enemy, enemies):
+        # Freeze
+        self.time_of_freeze = time.perf_counter()
+        self.enemies_freezing.append(hit_enemy)
+        hit_enemy.hit(self.direct_damage)
+        hit_enemy.immobilized = True
+        hit_enemy.image_used = "immobilized"
+
+        # Freeze Surrounding Enemies
+        freeze_range = self.get_freeze_range(hit_enemy)
+        handle_enemies = enemies.copy()
+        handle_enemies.remove(hit_enemy)
+        for enemy in handle_enemies:
+            if freeze_range.colliderect(enemy.rect):
                 # Freeze
-                self.time_of_freeze = time.perf_counter()
-                enemy.hit(self.direct_damage)
+                self.enemies_freezing.append(enemy)
+                enemy.hit(self.indirect_damage)
                 enemy.immobilized = True
                 enemy.image_used = "immobilized"
 
-                hit_enemy = enemy
-
-                # Freeze Surrounding Enemies
-                freeze_range = self.get_freeze_range(hit_enemy)
-                handle_enemies = enemies.copy()
-                handle_enemies.remove(hit_enemy)
-                for enemy in handle_enemies:
-                    if freeze_range.colliderect(enemy.rect):
-                        # Freeze
-                        self.enemies_freezing.append(enemy)
-                        enemy.hit(self.indirect_damage)
-                        enemy.immobilized = True
-                        enemy.image_used = "immobilized"
-
-                break
+    def defreeze(self):
+        if len(self.enemies_freezing) > 0:
+            dt = time.perf_counter() - self.time_of_freeze
+            if dt * 1000 >= self.freeze_cooldown:
+                for enemy in self.enemies_freezing:
+                    enemy.immobilized = False
+                self.delete = True
 
     # Functions --------------------------------------------------- #
     def get_freeze_range(self, enemy):

@@ -71,6 +71,7 @@ class Player:
 
         # Attack Lists
         self.attack_list = []
+        self.update_attack_list = []
         
         # Time 
         self.last_attack = time.perf_counter()
@@ -250,17 +251,28 @@ class Player:
                     self.last_manaregen = time.perf_counter()
 
     def update_attack(self, enemies):
+        # Attack List
         remove_attack = []
-
-        # Update Attacks
         for attack in self.attack_list:
             attack.update(enemies)
             if attack.collided:
+                if not attack.delete:
+                    self.update_attack_list.append(attack)
                 remove_attack.append(attack)
 
-        # Remove Attacks
         for attack in remove_attack:
             self.attack_list.remove(attack)
+
+        # Update Attack List
+        print(len(self.update_attack_list))
+        remove_attack = []
+        for attack in self.update_attack_list:
+            attack.update(enemies)
+            if attack.delete:
+                remove_attack.append(attack)
+
+        for attack in remove_attack:
+            self.update_attack_list.remove(attack)
 
     # Hit
     def hit(self, damage):

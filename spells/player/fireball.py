@@ -14,7 +14,7 @@ class FireBall:
         self.init_movement(target)
         self.damage = 3
         self.mana_cost = 1
-        self.collided = False
+        self.init_status()
 
     def init_color(self):
         self.color = (222, 158, 65)
@@ -27,6 +27,10 @@ class FireBall:
             target_x - self.circle.center[0] * window.enlarge)
         self.x_vel = math.cos(angle)
         self.y_vel = math.sin(angle)
+
+    def init_status(self):
+        self.collided = False
+        self.delete = False
 
     # Draw -------------------------------------------------------- #
     def draw(self, display):
@@ -50,11 +54,13 @@ class FireBall:
     def wall_collision(self):
         if circle_edge_collision(self.circle):
             self.collided = True
+            self.delete = True
 
     def entity_collision(self, enemies):
         for enemy in enemies:
             if self.circle.colliderect(enemy.rect):
                 enemy.hit(self.damage)
                 self.collided = True
+                self.delete = True
 
                 break
