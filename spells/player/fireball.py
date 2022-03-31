@@ -21,7 +21,7 @@ class FireBall:
     
     def init_movement(self, target):
         target_x, target_y = target
-        self.speed = 8
+        self.speed = 10
         angle = math.atan2(
             target_y - self.circle.center[1] * window.enlarge, 
             target_x - self.circle.center[0] * window.enlarge)
