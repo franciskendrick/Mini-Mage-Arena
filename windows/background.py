@@ -8,7 +8,6 @@ path = os.path.dirname(os.path.realpath(__file__))
 class Background:
     # Initialize -------------------------------------------------- #
     def __init__(self):
-        self.background_color = (16, 20, 31)
         self.arena_edges = pygame.image.load(
             f"{path}/assets/arena_edges.png")
         self.arena_inside = pygame.image.load(

@@ -84,11 +84,6 @@ class ManaCrystal:
         # Update
         self.idx += 1
 
-        # !!!
-        center = self.magent_range.center
-        radius = self.magent_range.radius
-        pygame.draw.circle(display, (0, 0, 255), center, radius, 1)
-
     # Update ------------------------------------------------------ #
     def update(self, player, mana_crystals):
         self.movement(player, mana_crystals)
